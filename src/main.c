@@ -44,10 +44,8 @@ static char* read_file(const char* path) {
 }
 
 int main(int argc, char** argv) {
-  BasicBlock* l = new_BasicBlock(1);
-  release_BasicBlock(l);
-  // char* input = read_file(argv[1]);
-  // OIR* ir = parse(input);
-  // release_OIR(ir);
+  char* input = read_file(argv[1]);
+  OIR* ir = parse(input);
+  release_OIR(ir);
   return 0;
 }

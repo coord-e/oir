@@ -26,6 +26,16 @@ static void skip_space(Env* env) {
   }
 }
 
+static void skip_comment(Env* env) {
+  if (*env->cursor != '#') {
+    return;
+  }
+  while (*env->cursor != '\n') {
+    env->cursor++;
+  }
+  env->cursor++;
+}
+
 static void parse_char(Env* env, char c) {
   if (*env->cursor != c) {
     error("%c is expected, but %c was found", c, *env->cursor);
@@ -254,7 +264,9 @@ OIR* parse(const char* p) {
   Env* env = init_Env(p);
   while (*env->cursor) {
     skip_space(env);
+    skip_comment(env);
     parse_Inst(env);
+    skip_comment(env);
   }
   return finalize_Env(env);
 }
