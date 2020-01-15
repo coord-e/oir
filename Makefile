@@ -34,7 +34,7 @@ test: $(BUILD_DIR)/$(TARGET_EXEC)
 
 .PHONY: style
 style:
-	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
+	clang-format -i $(SRC_DIR)/**/*.c $(SRC_DIR)/**/*.h
 
 .PHONY: clean
 clean:

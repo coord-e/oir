@@ -18,7 +18,7 @@
   void resize_##Name(Name*, unsigned size);                                                        \
   void reserve_##Name(Name*, unsigned size);                                                       \
   T* data_##Name(Name*);                                                                           \
-  Name* shallow_copy_##Name(Name*);                                                                        \
+  Name* shallow_copy_##Name(Name*);                                                                \
   void release_##Name(Name*);
 
 #define DEFINE_VECTOR(release_data, T, Name)                                                       \
@@ -70,7 +70,7 @@
   unsigned length_##Name(const Name* a) { return a->length; }                                      \
   unsigned capacity_##Name(const Name* a) { return a->capacity; }                                  \
   T* data_##Name(Name* a) { return a->data; }                                                      \
-  Name* shallow_copy_##Name(Name* a) {                                                                     \
+  Name* shallow_copy_##Name(Name* a) {                                                             \
     Name* new   = new_##Name(a->capacity);                                                         \
     new->length = a->length;                                                                       \
     for (unsigned i = 0; i < a->length; i++) {                                                     \

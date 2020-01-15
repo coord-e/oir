@@ -5,7 +5,6 @@
 #include "container/range.h"
 #include "ir/inst.h"
 
-
 DECLARE_LIST(BasicBlock*, BBRefList)
 DECLARE_LIST(Inst*, InstList)
 DECLARE_RANGE(Inst*, InstList, InstRange)

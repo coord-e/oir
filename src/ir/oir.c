@@ -1,11 +1,10 @@
 #include "ir/oir.h"
 
-
 DEFINE_LIST(release_BasicBlock, BasicBlock*, BBList)
 
 OIR* new_OIR() {
-  OIR* ir = calloc(1, sizeof(OIR));
-  ir->blocks = new_BBList();
+  OIR* ir          = calloc(1, sizeof(OIR));
+  ir->blocks       = new_BBList();
   ir->instructions = new_InstList();
   return ir;
 }

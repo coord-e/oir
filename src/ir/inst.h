@@ -4,7 +4,6 @@
 #include "container/vector.h"
 #include "ir/reg.h"
 
-
 DECLARE_VECTOR(Reg*, RegVec)
 typedef struct BasicBlock BasicBlock;
 
@@ -23,17 +22,21 @@ typedef struct {
   InstKind kind;
   unsigned id;
 
-  long imm;           // for IR_IMM
+  long imm;  // for IR_IMM
 
+  char* label_name;   // for IR_LABEL
   BasicBlock* label;  // ref; for IR_LABEL
 
-  BasicBlock* jump;   // ref; for IR_JUMP
+  char* jump_name;   // for IR_JUMP
+  BasicBlock* jump;  // ref; for IR_JUMP
 
+  char* then_name;    // for IR_BRANCH
+  char* else_name;    // for IR_BRANCH
   BasicBlock* then_;  // ref; for IR_BRANCH
   BasicBlock* else_;  // ref; for IR_BRANCH
 
-  Reg* rd;            // output register (null if unused)
-  RegVec* rs;         // input registers (won't be null)
+  Reg* rd;     // output register (null if unused)
+  RegVec* rs;  // input registers (won't be null)
 } Inst;
 
 Inst* new_Inst(unsigned id, InstKind);

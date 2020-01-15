@@ -2,28 +2,27 @@
 
 #include <stdlib.h>
 
-
 static Reg* new_Reg(RegKind kind) {
-  Reg* r = calloc(1, sizeof(Reg));
+  Reg* r  = calloc(1, sizeof(Reg));
   r->kind = kind;
   return r;
 }
 
 Reg* new_virtual_Reg(unsigned virtual) {
-  Reg* r = new_Reg(REG_VIRT);
+  Reg* r     = new_Reg(REG_VIRT);
   r->virtual = virtual;
   return r;
 }
 
 Reg* new_real_Reg(unsigned real) {
-  Reg* r = new_Reg(REG_REAL);
+  Reg* r  = new_Reg(REG_REAL);
   r->real = real;
   return r;
 }
 
 Reg* copy_Reg(Reg* r) {
   Reg* copy = new_Reg(r->kind);
-  *copy = *r;
+  *copy     = *r;
   return copy;
 }
 

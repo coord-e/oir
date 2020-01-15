@@ -2,14 +2,13 @@
 
 #include "util.h"
 
-
 DEFINE_LIST(release_void, BasicBlock*, BBRefList)
 DEFINE_LIST(release_Inst, Inst*, InstList)
 DEFINE_RANGE(Inst*, InstList, InstRange)
 
 BasicBlock* new_BasicBlock(unsigned id) {
-  BasicBlock* block = calloc(1, sizeof(BasicBlock));
-  block->id = id;
+  BasicBlock* block   = calloc(1, sizeof(BasicBlock));
+  block->id           = id;
   block->instructions = new_unchecked_InstRange(NULL, NULL);
   block->succs        = new_BBRefList();
   block->preds        = new_BBRefList();

@@ -8,7 +8,7 @@
 #include "util.h"
 
 // a doubly linked list
-#define DECLARE_LIST(T, Name)                                                                     \
+#define DECLARE_LIST(T, Name)                                                                      \
   typedef struct Name Name;                                                                        \
   typedef struct Name##Iterator Name##Iterator;                                                    \
   Name* new_##Name();                                                                              \
@@ -34,7 +34,7 @@
   Name* shallow_copy_##Name(const Name* list);                                                     \
   void release_##Name(Name* list);
 
-#define DEFINE_LIST(release_data, T, Name)                                                        \
+#define DEFINE_LIST(release_data, T, Name)                                                         \
   struct Name##Iterator {                                                                          \
     bool is_nil;                                                                                   \
     T data;                                                                                        \

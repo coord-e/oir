@@ -4,7 +4,6 @@
 #include "container/list.h"
 #include "ir/basic_block.h"
 
-
 DECLARE_LIST(BasicBlock*, BBList)
 
 typedef struct {
