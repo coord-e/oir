@@ -1,11 +1,10 @@
 #include "parser.h"
 
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "container/map.h"
 #include "util.h"
-
 
 static BasicBlock* dummy_copy(BasicBlock* block) {
   return block;
@@ -16,7 +15,7 @@ DEFINE_MAP(dummy_copy, release_void, BasicBlock*, BBMap)
 typedef struct {
   const char* cursor;
   OIR* oir;
-  BasicBlock* current_block; // ref
+  BasicBlock* current_block;  // ref
   BBMap* block_map;
 } Env;
 
@@ -94,7 +93,7 @@ static Inst* parse_mov(Env* env, Reg* rd) {
   }
 
   Inst* inst = add_inst(env, IR_MOV);
-  inst->rd = rd;
+  inst->rd   = rd;
   push_RegVec(inst->rs, rs);
   return inst;
 }
@@ -107,8 +106,8 @@ static Inst* parse_imm(Env* env, Reg* rd) {
   }
 
   Inst* inst = add_inst(env, IR_IMM);
-  inst->rd = rd;
-  inst->imm = imm;
+  inst->rd   = rd;
+  inst->imm  = imm;
   return inst;
 }
 
@@ -121,7 +120,7 @@ static Inst* parse_add(Env* env, Reg* rd) {
   }
 
   Inst* inst = add_inst(env, IR_ADD);
-  inst->rd = rd;
+  inst->rd   = rd;
   push_RegVec(inst->rs, rs1);
   push_RegVec(inst->rs, rs2);
   return inst;
@@ -136,7 +135,7 @@ static Inst* parse_equal(Env* env, Reg* rd) {
   }
 
   Inst* inst = add_inst(env, IR_EQUAL);
-  inst->rd = rd;
+  inst->rd   = rd;
   push_RegVec(inst->rs, rs1);
   push_RegVec(inst->rs, rs2);
   return inst;
@@ -151,23 +150,24 @@ static Inst* parse_label(Env* env, Reg* rd) {
 
   BasicBlock* block = add_block(env, name);
 
-  Inst* inst = add_inst(env, IR_LABEL);
+  Inst* inst       = add_inst(env, IR_LABEL);
   inst->label_name = name;
-  inst->label = block;
+  inst->label      = block;
 
   if (env->current_block == NULL) {
     env->oir->entry = block;
   } else {
-    env->current_block->instructions->to = prev_InstListIterator(back_InstList(env->oir->instructions));
+    env->current_block->instructions->to =
+        prev_InstListIterator(back_InstList(env->oir->instructions));
   }
-  env->current_block = block;
+  env->current_block                     = block;
   env->current_block->instructions->from = back_InstList(env->oir->instructions);
 
   return inst;
 }
 
 static Inst* parse_branch(Env* env, Reg* rd) {
-  Reg* rs = parse_Reg(env);
+  Reg* rs  = parse_Reg(env);
   char* l1 = parse_string(env);
   char* l2 = parse_string(env);
 
@@ -190,7 +190,7 @@ static Inst* parse_jump(Env* env, Reg* rd) {
     error("rd is unnecessary for 'JUMP' instruction");
   }
 
-  Inst* inst = add_inst(env, IR_JUMP);
+  Inst* inst      = add_inst(env, IR_JUMP);
   inst->jump_name = label;
 
   return inst;
@@ -205,6 +205,8 @@ static Inst* parse_return(Env* env, Reg* rd) {
 
   Inst* inst = add_inst(env, IR_RETURN);
   push_RegVec(inst->rs, rs);
+
+  env->oir->exit = env->current_block;
 
   return inst;
 }
@@ -244,18 +246,48 @@ static Inst* parse_Inst(Env* env) {
   return inst;
 }
 
+static void resolve_labels(Env* env) {
+  BasicBlock* cur = env->oir->entry;
+  for (InstListIterator* it = front_InstList(env->oir->instructions); !is_nil_InstListIterator(it);
+       it                   = next_InstListIterator(it)) {
+    Inst* inst = data_InstListIterator(it);
+    switch (inst->kind) {
+      case IR_LABEL:
+        cur = inst->label;
+        break;
+      case IR_BRANCH:
+        if (!lookup_BBMap(env->block_map, inst->then_name, &inst->then_)) {
+          error("could not find label %s", inst->then_name);
+        }
+        if (!lookup_BBMap(env->block_map, inst->else_name, &inst->else_)) {
+          error("could not find label %s", inst->else_name);
+        }
+        connect_BasicBlock(cur, inst->then_);
+        connect_BasicBlock(cur, inst->else_);
+        break;
+      case IR_JUMP:
+        if (!lookup_BBMap(env->block_map, inst->jump_name, &inst->jump)) {
+          error("could not find label %s", inst->jump_name);
+        }
+        connect_BasicBlock(cur, inst->jump);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 static Env* init_Env(const char* p) {
-  Env* env = calloc(1, sizeof(Env));
-  env->cursor = p;
-  env->oir = new_OIR();
+  Env* env       = calloc(1, sizeof(Env));
+  env->cursor    = p;
+  env->oir       = new_OIR();
   env->block_map = new_BBMap(16);
   return env;
 }
 
 static OIR* finalize_Env(Env* env) {
   release_BBMap(env->block_map);
-  OIR* ir = env->oir;
-  ir->exit = env->current_block;
+  OIR* ir  = env->oir;
   free(env);
   return ir;
 }
@@ -268,5 +300,6 @@ OIR* parse(const char* p) {
     parse_Inst(env);
     skip_comment(env);
   }
+  resolve_labels(env);
   return finalize_Env(env);
 }

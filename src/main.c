@@ -1,7 +1,7 @@
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 #include "ir.h"
 #include "parser.h"
@@ -45,7 +45,7 @@ static char* read_file(const char* path) {
 
 int main(int argc, char** argv) {
   char* input = read_file(argv[1]);
-  OIR* ir = parse(input);
+  OIR* ir     = parse(input);
   release_OIR(ir);
   return 0;
 }
