@@ -14,7 +14,7 @@ DEFINE_MAP(dummy_copy, release_void, BasicBlock*, BBMap)
 
 typedef struct {
   const char* cursor;
-  OIR* oir;
+  OIR* ir;
   BasicBlock* current_block;  // ref
   BBMap* block_map;
 } Env;
@@ -73,14 +73,14 @@ static Reg* parse_destination(Env* env) {
 }
 
 static Inst* add_inst(Env* env, InstKind kind) {
-  Inst* inst = new_Inst(env->oir->inst_count++, kind);
-  push_back_InstList(env->oir->instructions, inst);
+  Inst* inst = new_Inst(env->ir->inst_count++, kind);
+  push_back_InstList(env->ir->instructions, inst);
   return inst;
 }
 
 static BasicBlock* add_block(Env* env, const char* name) {
-  BasicBlock* block = new_BasicBlock(env->oir->block_count++);
-  push_back_BBList(env->oir->blocks, block);
+  BasicBlock* block = new_BasicBlock(env->ir->block_count++);
+  push_back_BBList(env->ir->blocks, block);
   insert_BBMap(env->block_map, name, block);
   return block;
 }
@@ -155,13 +155,13 @@ static Inst* parse_label(Env* env, Reg* rd) {
   inst->label      = block;
 
   if (env->current_block == NULL) {
-    env->oir->entry = block;
+    env->ir->entry = block;
   } else {
     env->current_block->instructions->to =
-        prev_InstListIterator(back_InstList(env->oir->instructions));
+        prev_InstListIterator(back_InstList(env->ir->instructions));
   }
   env->current_block                     = block;
-  env->current_block->instructions->from = back_InstList(env->oir->instructions);
+  env->current_block->instructions->from = back_InstList(env->ir->instructions);
 
   return inst;
 }
@@ -206,7 +206,7 @@ static Inst* parse_return(Env* env, Reg* rd) {
   Inst* inst = add_inst(env, IR_RETURN);
   push_RegVec(inst->rs, rs);
 
-  env->oir->exit = env->current_block;
+  env->ir->exit = env->current_block;
 
   return inst;
 }
@@ -247,8 +247,8 @@ static Inst* parse_Inst(Env* env) {
 }
 
 static void resolve_labels(Env* env) {
-  BasicBlock* cur = env->oir->entry;
-  for (InstListIterator* it = front_InstList(env->oir->instructions); !is_nil_InstListIterator(it);
+  BasicBlock* cur = env->ir->entry;
+  for (InstListIterator* it = front_InstList(env->ir->instructions); !is_nil_InstListIterator(it);
        it                   = next_InstListIterator(it)) {
     Inst* inst = data_InstListIterator(it);
     switch (inst->kind) {
@@ -280,14 +280,14 @@ static void resolve_labels(Env* env) {
 static Env* init_Env(const char* p) {
   Env* env       = calloc(1, sizeof(Env));
   env->cursor    = p;
-  env->oir       = new_OIR();
+  env->ir        = new_OIR();
   env->block_map = new_BBMap(16);
   return env;
 }
 
 static OIR* finalize_Env(Env* env) {
   release_BBMap(env->block_map);
-  OIR* ir = env->oir;
+  OIR* ir = env->ir;
   free(env);
   return ir;
 }
@@ -300,7 +300,7 @@ OIR* parse(const char* p) {
     parse_Inst(env);
     skip_comment(env);
   }
-  env->current_block->instructions->to = back_InstList(env->oir->instructions);
+  env->current_block->instructions->to = back_InstList(env->ir->instructions);
   resolve_labels(env);
   return finalize_Env(env);
 }
