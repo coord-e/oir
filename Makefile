@@ -34,7 +34,7 @@ test: $(BUILD_DIR)/$(TARGET_EXEC)
 
 .PHONY: style
 style:
-	clang-format -i $(SRC_DIR)/**/*.c $(SRC_DIR)/**/*.h
+	find src -name '*.c' -or -name '*.h' | xargs clang-format -i
 
 .PHONY: clean
 clean:
