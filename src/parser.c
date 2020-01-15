@@ -248,9 +248,7 @@ static Inst* parse_Inst(Env* env) {
 
 static void resolve_labels(Env* env) {
   BasicBlock* cur = env->ir->entry;
-  for (InstListIterator* it = front_InstList(env->ir->instructions); !is_nil_InstListIterator(it);
-       it                   = next_InstListIterator(it)) {
-    Inst* inst = data_InstListIterator(it);
+  FOR_EACH(Inst*, inst, InstList, env->ir->instructions) {
     switch (inst->kind) {
       case IR_LABEL:
         cur = inst->label;

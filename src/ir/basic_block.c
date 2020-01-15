@@ -36,11 +36,9 @@ void disconnect_BasicBlock(BasicBlock* from, BasicBlock* to) {
 }
 
 static void print_block_set(FILE* p, const char* prefix, const char* suffix, BBRefList* bbs) {
-  for (BBRefListIterator* it = front_BBRefList(bbs); !is_nil_BBRefListIterator(it);
-       it                    = next_BBRefListIterator(it)) {
-    BasicBlock* block = data_BBRefListIterator(it);
+  FOR_EACH(BasicBlock*, block, BBRefList, bbs) {
     fprintf(p, "%s%d%s", prefix, block->id, suffix);
-    if (!is_nil_BBRefListIterator(next_BBRefListIterator(it))) {
+    if (!is_nil_BBRefListIterator(next_BBRefListIterator(it_block))) {
       fprintf(p, ", ");
     }
   }
@@ -53,9 +51,7 @@ void print_BasicBlock(FILE* p, BasicBlock* block) {
   print_block_set(p, "", "", block->preds);
   fprintf(p, "}\n");
 
-  for (InstRangeIterator* it = front_InstRange(block->instructions); !is_nil_InstRangeIterator(it);
-       it                    = next_InstRangeIterator(it)) {
-    Inst* inst = data_InstRangeIterator(it);
+  FOR_EACH(Inst*, inst, InstRange, block->instructions) {
     print_Inst(p, inst);
     fprintf(p, "\n");
   }
@@ -63,10 +59,8 @@ void print_BasicBlock(FILE* p, BasicBlock* block) {
 
 void print_graph_BasicBlock(FILE* p, BasicBlock* block) {
   fprintf(p, "block_%d [shape = record, fontname = monospace, label = \"{<init>", block->id);
-  for (InstRangeIterator* it = front_InstRange(block->instructions); !is_nil_InstRangeIterator(it);
-       it                    = next_InstRangeIterator(it)) {
-    Inst* inst   = data_InstRangeIterator(it);
-    bool is_last = is_nil_InstRangeIterator(next_InstRangeIterator(it));
+  FOR_EACH(Inst*, inst, InstRange, block->instructions) {
+    bool is_last = is_nil_InstRangeIterator(next_InstRangeIterator(it_inst));
     if (is_last) {
       fprintf(p, "<last>");
     }

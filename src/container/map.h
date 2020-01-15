@@ -62,9 +62,7 @@
   }                                                                                                \
   static Name##Entries* copy_entries_##Name(Name##Entries* list, bool copy_value) {                \
     Name##Entries* copy = new_##Name##Entries();                                                   \
-    for (Name##Entries##Iterator* it               = front_##Name##Entries(list);                  \
-         !is_nil_##Name##Entries##Iterator(it); it = next_##Name##Entries##Iterator(it)) {         \
-      Name##Entry* c = data_##Name##Entries##Iterator(it);                                         \
+    FOR_EACH(Name##Entry*, c, Name##Entries, list) {                                               \
       Name##Entry* e = copy_##Name##Entry(c, copy_value);                                          \
       push_back_##Name##Entries(copy, e);                                                          \
     }                                                                                              \
@@ -104,9 +102,7 @@
     error("key \"%s\" not found", k);                                                              \
   }                                                                                                \
   static bool search_##Name(Name##Entries* es, unsigned hash, T* out) {                            \
-    for (Name##Entries##Iterator* it               = front_##Name##Entries(es);                    \
-         !is_nil_##Name##Entries##Iterator(it); it = next_##Name##Entries##Iterator(it)) {         \
-      Name##Entry* e = data_##Name##Entries##Iterator(it);                                         \
+    FOR_EACH(Name##Entry*, e, Name##Entries, es) {                                                 \
       if (e->hash == hash) {                                                                       \
         if (out != NULL) {                                                                         \
           *out = e->value;                                                                         \
@@ -123,11 +119,9 @@
     return search_##Name(es, hash, out);                                                           \
   }                                                                                                \
   static void search_remove_##Name(Name##Entries* es, unsigned hash) {                             \
-    for (Name##Entries##Iterator* it               = front_##Name##Entries(es);                    \
-         !is_nil_##Name##Entries##Iterator(it); it = next_##Name##Entries##Iterator(it)) {         \
-      Name##Entry* e = data_##Name##Entries##Iterator(it);                                         \
+    FOR_EACH(Name##Entry*, e, Name##Entries, es) {                                                 \
       if (e->hash == hash) {                                                                       \
-        remove_##Name##Entries##Iterator(it);                                                      \
+        remove_##Name##Entries##Iterator(it_e);                                                    \
         return;                                                                                    \
       }                                                                                            \
     }                                                                                              \
@@ -151,13 +145,11 @@
 
 #define DEFINE_MAP_PRINTER(print_T, begin, sep, sep_kv, end, Name)                                 \
   static void print_entries_##Name(FILE* p, Name##Entries* es) {                                   \
-    for (Name##Entries##Iterator* it               = front_##Name##Entries(es);                    \
-         !is_nil_##Name##Entries##Iterator(it); it = next_##Name##Entries##Iterator(it)) {         \
-      Name##Entry* e = data_##Name##Entries##Iterator(it);                                         \
+    FOR_EACH(Name##Entry*, e, Name##Entries, es) {                                                 \
       fputs(e->key, p);                                                                            \
       fputs(sep_kv, p);                                                                            \
       print_T(p, e->value);                                                                        \
-      if (!is_nil_##Name##Entries##Iterator(next_##Name##Entries##Iterator(it))) {                 \
+      if (!is_nil_##Name##Entries##Iterator(next_##Name##Entries##Iterator(it_e))) {               \
         fputs(sep, p);                                                                             \
       }                                                                                            \
     }                                                                                              \

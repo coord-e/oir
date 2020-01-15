@@ -27,41 +27,19 @@ void detach_BasicBlock(OIR* ir, BasicBlock* b) {
   assert(ir->entry != b);
   assert(ir->exit != b);
 
-  {
-    BBRefListIterator* it = front_BBRefList(b->succs);
-    while (!is_nil_BBRefListIterator(it)) {
-      BasicBlock* suc = data_BBRefListIterator(it);
-      erase_one_BBRefList(suc->preds, b);
-      it = next_BBRefListIterator(it);
-    }
-  }
-  {
-    BBRefListIterator* it = front_BBRefList(b->preds);
-    while (!is_nil_BBRefListIterator(it)) {
-      BasicBlock* pre = data_BBRefListIterator(it);
-      erase_one_BBRefList(pre->succs, b);
-      it = next_BBRefListIterator(it);
-    }
-  }
+  FOR_EACH(BasicBlock*, suc, BBRefList, b->succs) { erase_one_BBRefList(suc->preds, b); }
+  FOR_EACH(BasicBlock*, pre, BBRefList, b->preds) { erase_one_BBRefList(pre->succs, b); }
 
   erase_one_BBList(ir->blocks, b);
 }
 
 void print_OIR(FILE* p, OIR* ir) {
   fprintf(p, "# OIR entry=%d, exit=%d\n", ir->entry->id, ir->exit->id);
-  for (BBListIterator* it = front_BBList(ir->blocks); !is_nil_BBListIterator(it);
-       it                 = next_BBListIterator(it)) {
-    BasicBlock* block = data_BBListIterator(it);
-    print_BasicBlock(p, block);
-  }
+  FOR_EACH(BasicBlock*, block, BBList, ir->blocks) { print_BasicBlock(p, block); }
 }
 
 void print_graph_OIR(FILE* p, OIR* ir) {
   fprintf(p, "digraph CFG {\n");
-  for (BBListIterator* it = front_BBList(ir->blocks); !is_nil_BBListIterator(it);
-       it                 = next_BBListIterator(it)) {
-    BasicBlock* block = data_BBListIterator(it);
-    print_graph_BasicBlock(p, block);
-  }
+  FOR_EACH(BasicBlock*, block, BBList, ir->blocks) { print_graph_BasicBlock(p, block); }
   fprintf(p, "}\n");
 }
