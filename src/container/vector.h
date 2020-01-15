@@ -82,7 +82,7 @@
     if (a == NULL) {                                                                               \
       return;                                                                                      \
     }                                                                                              \
-    for (unsigned i = 0; i < a->length; i++) {                                                     \
+    for (unsigned i = 0; i < a->capacity; i++) {                                                   \
       release_data(a->data[i]);                                                                    \
     }                                                                                              \
     free(a->data);                                                                                 \

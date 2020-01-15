@@ -18,6 +18,10 @@ void release_Inst(Inst* inst) {
   }
   release_Reg(inst->rd);
   release_RegVec(inst->rs);
+  free(inst->label_name);
+  free(inst->then_name);
+  free(inst->else_name);
+  free(inst->jump_name);
   free(inst);
 }
 

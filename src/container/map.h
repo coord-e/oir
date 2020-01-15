@@ -144,6 +144,7 @@
       return;                                                                                      \
     }                                                                                              \
     release_##Name##Table(m->table);                                                               \
+    free(m);                                                                                       \
   }
 
 #define DECLARE_MAP_PRINTER(Name) void print_##Name(FILE*, Name*);

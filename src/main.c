@@ -48,5 +48,6 @@ int main(int argc, char** argv) {
   OIR* ir     = parse(input);
   print_graph_OIR(stdout, ir);
   release_OIR(ir);
+  free(input);
   return 0;
 }
