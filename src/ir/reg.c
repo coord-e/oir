@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+#include "util.h"
+
 static Reg* new_Reg(RegKind kind) {
   Reg* r  = calloc(1, sizeof(Reg));
   r->kind = kind;
@@ -31,4 +33,17 @@ void release_Reg(Reg* r) {
     return;
   }
   free(r);
+}
+
+void print_Reg(FILE* p, Reg* r) {
+  switch (r->kind) {
+    case REG_VIRT:
+      fprintf(p, "v%d", r->virtual);
+      break;
+    case REG_REAL:
+      fprintf(p, "r%d", r->real);
+      break;
+    default:
+      OIR_UNREACHABLE;
+  }
 }

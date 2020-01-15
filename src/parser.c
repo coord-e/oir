@@ -287,7 +287,7 @@ static Env* init_Env(const char* p) {
 
 static OIR* finalize_Env(Env* env) {
   release_BBMap(env->block_map);
-  OIR* ir  = env->oir;
+  OIR* ir = env->oir;
   free(env);
   return ir;
 }
@@ -300,6 +300,7 @@ OIR* parse(const char* p) {
     parse_Inst(env);
     skip_comment(env);
   }
+  env->current_block->instructions->to = back_InstList(env->oir->instructions);
   resolve_labels(env);
   return finalize_Env(env);
 }

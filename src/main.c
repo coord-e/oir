@@ -46,6 +46,7 @@ static char* read_file(const char* path) {
 int main(int argc, char** argv) {
   char* input = read_file(argv[1]);
   OIR* ir     = parse(input);
+  print_OIR(stdout, ir);
   release_OIR(ir);
   return 0;
 }

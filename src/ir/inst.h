@@ -1,6 +1,8 @@
 #ifndef OIR_IR_INST_H
 #define OIR_IR_INST_H
 
+#include <stdio.h>
+
 #include "container/vector.h"
 #include "ir/reg.h"
 
@@ -41,5 +43,6 @@ typedef struct {
 
 Inst* new_Inst(unsigned id, InstKind);
 void release_Inst(Inst*);
+void print_Inst(FILE*, Inst*);
 
 #endif

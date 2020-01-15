@@ -1,6 +1,8 @@
 #ifndef OIR_IR_OIR_H
 #define OIR_IR_OIR_H
 
+#include <stdio.h>
+
 #include "container/list.h"
 #include "ir/basic_block.h"
 
@@ -19,6 +21,7 @@ typedef struct {
 
 OIR* new_OIR();
 void release_OIR(OIR*);
+void print_OIR(FILE*, OIR*);
 
 void detach_BasicBlock(OIR*, BasicBlock*);
 

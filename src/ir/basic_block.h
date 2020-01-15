@@ -1,6 +1,8 @@
 #ifndef OIR_IR_BASIC_BLOCK_H
 #define OIR_IR_BASIC_BLOCK_H
 
+#include <stdio.h>
+
 #include "container/list.h"
 #include "container/range.h"
 #include "ir/inst.h"
@@ -22,6 +24,7 @@ struct BasicBlock {
 
 BasicBlock* new_BasicBlock(unsigned id);
 void release_BasicBlock(BasicBlock*);
+void print_BasicBlock(FILE*, BasicBlock*);
 
 void connect_BasicBlock(BasicBlock* from, BasicBlock* to);
 void disconnect_BasicBlock(BasicBlock* from, BasicBlock* to);

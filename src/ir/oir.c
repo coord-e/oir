@@ -46,3 +46,12 @@ void detach_BasicBlock(OIR* ir, BasicBlock* b) {
 
   erase_one_BBList(ir->blocks, b);
 }
+
+void print_OIR(FILE* p, OIR* ir) {
+  fprintf(p, "# OIR entry=%d, exit=%d\n", ir->entry->id, ir->exit->id);
+  for (BBListIterator* it = front_BBList(ir->blocks); !is_nil_BBListIterator(it);
+       it                 = next_BBListIterator(it)) {
+    BasicBlock* block = data_BBListIterator(it);
+    print_BasicBlock(p, block);
+  }
+}
