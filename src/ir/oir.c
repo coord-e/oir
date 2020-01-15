@@ -55,3 +55,13 @@ void print_OIR(FILE* p, OIR* ir) {
     print_BasicBlock(p, block);
   }
 }
+
+void print_graph_OIR(FILE* p, OIR* ir) {
+  fprintf(p, "digraph CFG {\n");
+  for (BBListIterator* it = front_BBList(ir->blocks); !is_nil_BBListIterator(it);
+       it                 = next_BBListIterator(it)) {
+    BasicBlock* block = data_BBListIterator(it);
+    print_graph_BasicBlock(p, block);
+  }
+  fprintf(p, "}\n");
+}

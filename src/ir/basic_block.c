@@ -35,30 +35,52 @@ void disconnect_BasicBlock(BasicBlock* from, BasicBlock* to) {
   erase_one_BBRefList(to->preds, from);
 }
 
-static void print_block_set(FILE* p, BBRefList* bbs) {
-  fprintf(p, "{");
+static void print_block_set(FILE* p, const char* prefix, const char* suffix, BBRefList* bbs) {
   for (BBRefListIterator* it = front_BBRefList(bbs); !is_nil_BBRefListIterator(it);
        it                    = next_BBRefListIterator(it)) {
     BasicBlock* block = data_BBRefListIterator(it);
-    fprintf(p, "%d", block->id);
+    fprintf(p, "%s%d%s", prefix, block->id, suffix);
     if (!is_nil_BBRefListIterator(next_BBRefListIterator(it))) {
       fprintf(p, ", ");
     }
   }
-  fprintf(p, "}");
 }
 
 void print_BasicBlock(FILE* p, BasicBlock* block) {
-  fprintf(p, "# BB%d succs=", block->id);
-  print_block_set(p, block->succs);
-  fprintf(p, " preds=");
-  print_block_set(p, block->preds);
-  fprintf(p, "\n");
+  fprintf(p, "# BB%d succs={", block->id);
+  print_block_set(p, "", "", block->succs);
+  fprintf(p, "} preds={");
+  print_block_set(p, "", "", block->preds);
+  fprintf(p, "}\n");
 
   for (InstRangeIterator* it = front_InstRange(block->instructions); !is_nil_InstRangeIterator(it);
        it                    = next_InstRangeIterator(it)) {
     Inst* inst = data_InstRangeIterator(it);
     print_Inst(p, inst);
+    fprintf(p, "\n");
+  }
+}
+
+void print_graph_BasicBlock(FILE* p, BasicBlock* block) {
+  fprintf(p, "block_%d [shape = record, fontname = monospace, label = \"{<init>", block->id);
+  for (InstRangeIterator* it = front_InstRange(block->instructions); !is_nil_InstRangeIterator(it);
+       it                    = next_InstRangeIterator(it)) {
+    Inst* inst   = data_InstRangeIterator(it);
+    bool is_last = is_nil_InstRangeIterator(next_InstRangeIterator(it));
+    if (is_last) {
+      fprintf(p, "<last>");
+    }
+    print_Inst(p, inst);
+    fprintf(p, "\\l");
+    if (!is_last) {
+      fprintf(p, "|");
+    }
+  }
+  fprintf(p, "}\"]\n");
+
+  if (!is_empty_BBRefList(block->succs)) {
+    fprintf(p, "block_%d:last:s -> ", block->id);
+    print_block_set(p, "block_", ":init:n", block->succs);
     fprintf(p, "\n");
   }
 }
