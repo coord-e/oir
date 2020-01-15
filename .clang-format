@@ -6,3 +6,4 @@ AlignEscapedNewlinesLeft: false
 BreakBeforeBraces: Attach
 UseTab: Never
 ColumnLimit: 100
+ForEachMacros: ['FOR_EACH', 'FOR_EACH_BACK', 'FOR_EACH_VEC']

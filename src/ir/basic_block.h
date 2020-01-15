@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#include "container/bit_set.h"
 #include "container/list.h"
 #include "container/range.h"
 #include "ir/inst.h"
@@ -20,6 +21,11 @@ struct BasicBlock {
 
   BBRefList* succs;
   BBRefList* preds;
+
+  BitSet* live_in;
+  BitSet* live_out;
+  BitSet* live_gen;
+  BitSet* live_kill;
 };
 
 BasicBlock* new_BasicBlock(unsigned id);

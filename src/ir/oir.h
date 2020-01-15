@@ -14,6 +14,7 @@ typedef struct {
 
   unsigned block_count;
   unsigned inst_count;
+  unsigned reg_count;
 
   BasicBlock* entry;  // ref
   BasicBlock* exit;   // ref

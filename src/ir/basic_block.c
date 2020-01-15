@@ -22,6 +22,10 @@ void release_BasicBlock(BasicBlock* block) {
   release_InstRange(block->instructions);
   release_BBRefList(block->succs);
   release_BBRefList(block->preds);
+  release_BitSet(block->live_in);
+  release_BitSet(block->live_out);
+  release_BitSet(block->live_gen);
+  release_BitSet(block->live_kill);
   free(block);
 }
 
@@ -36,7 +40,7 @@ void disconnect_BasicBlock(BasicBlock* from, BasicBlock* to) {
 }
 
 static void print_block_set(FILE* p, const char* prefix, const char* suffix, BBRefList* bbs) {
-  FOR_EACH(BasicBlock*, block, BBRefList, bbs) {
+  FOR_EACH (BasicBlock*, block, BBRefList, bbs) {
     fprintf(p, "%s%d%s", prefix, block->id, suffix);
     if (!is_nil_BBRefListIterator(next_BBRefListIterator(it_block))) {
       fprintf(p, ", ");
@@ -51,7 +55,7 @@ void print_BasicBlock(FILE* p, BasicBlock* block) {
   print_block_set(p, "", "", block->preds);
   fprintf(p, "}\n");
 
-  FOR_EACH(Inst*, inst, InstRange, block->instructions) {
+  FOR_EACH (Inst*, inst, InstRange, block->instructions) {
     print_Inst(p, inst);
     fprintf(p, "\n");
   }
@@ -59,7 +63,7 @@ void print_BasicBlock(FILE* p, BasicBlock* block) {
 
 void print_graph_BasicBlock(FILE* p, BasicBlock* block) {
   fprintf(p, "block_%d [shape = record, fontname = monospace, label = \"{<init>", block->id);
-  FOR_EACH(Inst*, inst, InstRange, block->instructions) {
+  FOR_EACH (Inst*, inst, InstRange, block->instructions) {
     bool is_last = is_nil_InstRangeIterator(next_InstRangeIterator(it_inst));
     if (is_last) {
       fprintf(p, "<last>");

@@ -62,7 +62,7 @@
   }                                                                                                \
   static Name##Entries* copy_entries_##Name(Name##Entries* list, bool copy_value) {                \
     Name##Entries* copy = new_##Name##Entries();                                                   \
-    FOR_EACH(Name##Entry*, c, Name##Entries, list) {                                               \
+    FOR_EACH (Name##Entry*, c, Name##Entries, list) {                                              \
       Name##Entry* e = copy_##Name##Entry(c, copy_value);                                          \
       push_back_##Name##Entries(copy, e);                                                          \
     }                                                                                              \
@@ -102,7 +102,7 @@
     error("key \"%s\" not found", k);                                                              \
   }                                                                                                \
   static bool search_##Name(Name##Entries* es, unsigned hash, T* out) {                            \
-    FOR_EACH(Name##Entry*, e, Name##Entries, es) {                                                 \
+    FOR_EACH (Name##Entry*, e, Name##Entries, es) {                                                \
       if (e->hash == hash) {                                                                       \
         if (out != NULL) {                                                                         \
           *out = e->value;                                                                         \
@@ -119,7 +119,7 @@
     return search_##Name(es, hash, out);                                                           \
   }                                                                                                \
   static void search_remove_##Name(Name##Entries* es, unsigned hash) {                             \
-    FOR_EACH(Name##Entry*, e, Name##Entries, es) {                                                 \
+    FOR_EACH (Name##Entry*, e, Name##Entries, es) {                                                \
       if (e->hash == hash) {                                                                       \
         remove_##Name##Entries##Iterator(it_e);                                                    \
         return;                                                                                    \
@@ -145,7 +145,7 @@
 
 #define DEFINE_MAP_PRINTER(print_T, begin, sep, sep_kv, end, Name)                                 \
   static void print_entries_##Name(FILE* p, Name##Entries* es) {                                   \
-    FOR_EACH(Name##Entry*, e, Name##Entries, es) {                                                 \
+    FOR_EACH (Name##Entry*, e, Name##Entries, es) {                                                \
       fputs(e->key, p);                                                                            \
       fputs(sep_kv, p);                                                                            \
       print_T(p, e->value);                                                                        \

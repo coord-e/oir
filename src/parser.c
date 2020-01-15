@@ -63,6 +63,11 @@ static char* parse_string(Env* env) {
 static Reg* parse_Reg(Env* env) {
   parse_char(env, 'v');
   unsigned id = parse_number(env);
+
+  if (id >= env->ir->reg_count) {
+    env->ir->reg_count = id + 1;
+  }
+
   return new_virtual_Reg(id);
 }
 
@@ -248,7 +253,7 @@ static Inst* parse_Inst(Env* env) {
 
 static void resolve_labels(Env* env) {
   BasicBlock* cur = env->ir->entry;
-  FOR_EACH(Inst*, inst, InstList, env->ir->instructions) {
+  FOR_EACH (Inst*, inst, InstList, env->ir->instructions) {
     switch (inst->kind) {
       case IR_LABEL:
         cur = inst->label;

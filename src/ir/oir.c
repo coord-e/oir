@@ -27,19 +27,19 @@ void detach_BasicBlock(OIR* ir, BasicBlock* b) {
   assert(ir->entry != b);
   assert(ir->exit != b);
 
-  FOR_EACH(BasicBlock*, suc, BBRefList, b->succs) { erase_one_BBRefList(suc->preds, b); }
-  FOR_EACH(BasicBlock*, pre, BBRefList, b->preds) { erase_one_BBRefList(pre->succs, b); }
+  FOR_EACH (BasicBlock*, suc, BBRefList, b->succs) { erase_one_BBRefList(suc->preds, b); }
+  FOR_EACH (BasicBlock*, pre, BBRefList, b->preds) { erase_one_BBRefList(pre->succs, b); }
 
   erase_one_BBList(ir->blocks, b);
 }
 
 void print_OIR(FILE* p, OIR* ir) {
   fprintf(p, "# OIR entry=%d, exit=%d\n", ir->entry->id, ir->exit->id);
-  FOR_EACH(BasicBlock*, block, BBList, ir->blocks) { print_BasicBlock(p, block); }
+  FOR_EACH (BasicBlock*, block, BBList, ir->blocks) { print_BasicBlock(p, block); }
 }
 
 void print_graph_OIR(FILE* p, OIR* ir) {
   fprintf(p, "digraph CFG {\n");
-  FOR_EACH(BasicBlock*, block, BBList, ir->blocks) { print_graph_BasicBlock(p, block); }
+  FOR_EACH (BasicBlock*, block, BBList, ir->blocks) { print_graph_BasicBlock(p, block); }
   fprintf(p, "}\n");
 }

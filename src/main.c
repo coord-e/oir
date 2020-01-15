@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "data_flow.h"
 #include "ir.h"
 #include "parser.h"
 
@@ -46,6 +47,7 @@ static char* read_file(const char* path) {
 int main(int argc, char** argv) {
   char* input = read_file(argv[1]);
   OIR* ir     = parse(input);
+  data_flow_liveness(ir);
   print_graph_OIR(stdout, ir);
   release_OIR(ir);
   free(input);

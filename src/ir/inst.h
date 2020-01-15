@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#include "container/bit_set.h"
 #include "container/vector.h"
 #include "ir/reg.h"
 
@@ -39,6 +40,9 @@ typedef struct {
 
   Reg* rd;     // output register (null if unused)
   RegVec* rs;  // input registers (won't be null)
+
+  BitSet* live_in;
+  BitSet* live_out;
 } Inst;
 
 Inst* new_Inst(unsigned id, InstKind);

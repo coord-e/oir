@@ -18,6 +18,8 @@ void release_Inst(Inst* inst) {
   }
   release_Reg(inst->rd);
   release_RegVec(inst->rs);
+  release_BitSet(inst->live_in);
+  release_BitSet(inst->live_out);
   free(inst->label_name);
   free(inst->then_name);
   free(inst->else_name);
