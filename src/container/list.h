@@ -1,5 +1,5 @@
-#ifndef OIR_LIST_H
-#define OIR_LIST_H
+#ifndef OIR_CONTAINER_LIST_H
+#define OIR_CONTAINER_LIST_H
 
 #include <stdbool.h>
 #include <stdio.h>

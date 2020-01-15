@@ -1,5 +1,5 @@
-#ifndef OIR_RANGE_H
-#define OIR_RANGE_H
+#ifndef OIR_CONTAINER_RANGE_H
+#define OIR_CONTAINER_RANGE_H
 
 #include <assert.h>
 #include <stdlib.h>

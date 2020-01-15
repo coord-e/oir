@@ -1,7 +1,7 @@
 BUILD_DIR ?= ./build
 SRC_DIR ?= ./src
 
-CFLAGS ?= -Wall -std=c11 -pedantic
+CFLAGS ?= -Wall -std=c11 -pedantic -Isrc
 CPPFLAGS ?= -MMD -MP
 
 DEBUG ?= 1

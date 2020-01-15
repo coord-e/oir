@@ -1,5 +1,5 @@
-#ifndef OIR_VECTOR_H
-#define OIR_VECTOR_H
+#ifndef OIR_CONTAINER_VECTOR_H
+#define OIR_CONTAINER_VECTOR_H
 
 #include <assert.h>
 #include <stdio.h>
