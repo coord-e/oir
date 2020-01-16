@@ -50,9 +50,9 @@ static long parse_number(Env* env) {
   return id;
 }
 
-static char* parse_string(Env* env) {
+static char* parse_ident(Env* env) {
   const char* init = env->cursor;
-  while (isalpha(*env->cursor)) {
+  while (isalnum(*env->cursor)) {
     env->cursor++;
   }
   char* string = strndup(init, env->cursor - init);
@@ -147,7 +147,7 @@ static Inst* parse_equal(Env* env, Reg* rd) {
 }
 
 static Inst* parse_label(Env* env, Reg* rd) {
-  char* name = parse_string(env);
+  char* name = parse_ident(env);
 
   if (rd != NULL) {
     error("rd is unnecessary for 'LABEL' instruction");
@@ -173,8 +173,8 @@ static Inst* parse_label(Env* env, Reg* rd) {
 
 static Inst* parse_branch(Env* env, Reg* rd) {
   Reg* rs  = parse_Reg(env);
-  char* l1 = parse_string(env);
-  char* l2 = parse_string(env);
+  char* l1 = parse_ident(env);
+  char* l2 = parse_ident(env);
 
   if (rd != NULL) {
     error("rd is unnecessary for 'BRANCH' instruction");
@@ -189,7 +189,7 @@ static Inst* parse_branch(Env* env, Reg* rd) {
 }
 
 static Inst* parse_jump(Env* env, Reg* rd) {
-  char* label = parse_string(env);
+  char* label = parse_ident(env);
 
   if (rd != NULL) {
     error("rd is unnecessary for 'JUMP' instruction");
@@ -222,7 +222,7 @@ static Inst* parse_Inst(Env* env) {
     rd = parse_destination(env);
   }
 
-  char* name = parse_string(env);
+  char* name = parse_ident(env);
   Inst* inst;
 
 #define IS_SAME(sv, sc) (strlen(sv) == sizeof(sc) - 1 && memcmp(sv, sc, sizeof(sc) - 1) == 0)
