@@ -48,7 +48,8 @@ int main(int argc, char** argv) {
   char* input = read_file(argv[1]);
   OIR* ir     = parse(input);
   data_flow_liveness(ir);
-  print_graph_OIR(stdout, ir);
+  data_flow_reaching_definition(ir);
+  print_OIR(stdout, ir);
   release_OIR(ir);
   free(input);
   return 0;

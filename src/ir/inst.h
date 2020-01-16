@@ -43,6 +43,8 @@ typedef struct {
 
   BitSet* live_in;
   BitSet* live_out;
+  BitSet* reach_in;
+  BitSet* reach_out;
 } Inst;
 
 Inst* new_Inst(unsigned id, InstKind);

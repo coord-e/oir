@@ -1,6 +1,7 @@
 #include "ir/oir.h"
 
 DEFINE_LIST(release_BasicBlock, BasicBlock*, BBList)
+DEFINE_VECTOR(release_BitSet, BitSet*, BSVec)
 
 OIR* new_OIR() {
   OIR* ir          = calloc(1, sizeof(OIR));
@@ -15,6 +16,7 @@ void release_OIR(OIR* ir) {
   }
   release_BBList(ir->blocks);
   release_InstList(ir->instructions);
+  release_BSVec(ir->definitions);
   free(ir);
 }
 

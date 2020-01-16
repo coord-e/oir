@@ -38,9 +38,6 @@ static void compute_local_live_sets(OIR* ir) {
   }
 }
 
-DECLARE_VECTOR(BitSet*, BSVec)
-DEFINE_VECTOR(release_BitSet, BitSet*, BSVec)
-
 static void compute_global_live_sets(OIR* ir) {
   // temporary vector to detect changes in `live_in`
   BSVec* lasts = new_BSVec(ir->block_count);

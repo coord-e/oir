@@ -3,10 +3,13 @@
 
 #include <stdio.h>
 
+#include "container/bit_set.h"
 #include "container/list.h"
+#include "container/vector.h"
 #include "ir/basic_block.h"
 
 DECLARE_LIST(BasicBlock*, BBList)
+DECLARE_VECTOR(BitSet*, BSVec)
 
 typedef struct {
   BBList* blocks;
@@ -18,6 +21,8 @@ typedef struct {
 
   BasicBlock* entry;  // ref
   BasicBlock* exit;   // ref
+
+  BSVec* definitions;
 } OIR;
 
 OIR* new_OIR();

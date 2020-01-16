@@ -26,6 +26,10 @@ struct BasicBlock {
   BitSet* live_out;
   BitSet* live_gen;
   BitSet* live_kill;
+  BitSet* reach_in;
+  BitSet* reach_out;
+  BitSet* reach_gen;
+  BitSet* reach_kill;
 };
 
 BasicBlock* new_BasicBlock(unsigned id);
