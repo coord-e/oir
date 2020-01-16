@@ -49,6 +49,7 @@ int main(int argc, char** argv) {
   OIR* ir     = parse(input);
   data_flow_liveness(ir);
   data_flow_reaching_definition(ir);
+  data_flow_available_expression(ir);
   print_OIR(stdout, ir);
   release_OIR(ir);
   free(input);

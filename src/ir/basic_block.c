@@ -26,6 +26,14 @@ void release_BasicBlock(BasicBlock* block) {
   release_BitSet(block->live_out);
   release_BitSet(block->live_gen);
   release_BitSet(block->live_kill);
+  release_BitSet(block->reach_in);
+  release_BitSet(block->reach_out);
+  release_BitSet(block->reach_gen);
+  release_BitSet(block->reach_kill);
+  release_BitSet(block->available_in);
+  release_BitSet(block->available_out);
+  release_BitSet(block->available_gen);
+  release_BitSet(block->available_kill);
   free(block);
 }
 

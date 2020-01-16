@@ -41,10 +41,14 @@ typedef struct {
   Reg* rd;     // output register (null if unused)
   RegVec* rs;  // input registers (won't be null)
 
+  unsigned expression_id;
+
   BitSet* live_in;
   BitSet* live_out;
   BitSet* reach_in;
   BitSet* reach_out;
+  BitSet* available_in;
+  BitSet* available_out;
 } Inst;
 
 Inst* new_Inst(unsigned id, InstKind);

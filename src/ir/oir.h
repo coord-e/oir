@@ -18,11 +18,13 @@ typedef struct {
   unsigned block_count;
   unsigned inst_count;
   unsigned reg_count;
+  unsigned expr_count;
 
   BasicBlock* entry;  // ref
   BasicBlock* exit;   // ref
 
   BSVec* definitions;
+  BSVec* kill_expressions;
 } OIR;
 
 OIR* new_OIR();

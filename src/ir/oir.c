@@ -17,6 +17,7 @@ void release_OIR(OIR* ir) {
   release_BBList(ir->blocks);
   release_InstList(ir->instructions);
   release_BSVec(ir->definitions);
+  release_BSVec(ir->kill_expressions);
   free(ir);
 }
 

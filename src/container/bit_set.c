@@ -20,9 +20,13 @@ static BitSet* init_BitSet() {
   return calloc(1, sizeof(BitSet));
 }
 
+static unsigned calc_size(unsigned length) {
+  return (length + block_size - 1) / block_size;
+}
+
 BitSet* new_BitSet(unsigned length) {
   BitSet* s     = init_BitSet();
-  unsigned size = (length + block_size - 1) / block_size;
+  unsigned size = calc_size(length);
   s->data       = new_U64Vec(size);
   resize_U64Vec(s->data, size);
   s->length = length;
@@ -32,6 +36,12 @@ BitSet* new_BitSet(unsigned length) {
 
 unsigned length_BitSet(const BitSet* s) {
   return s->length;
+}
+
+void resize_BitSet(BitSet* s, unsigned length) {
+  unsigned size = calc_size(length);
+  resize_U64Vec(s->data, size);
+  s->length = length;
 }
 
 void or_BitSet(BitSet* s1, const BitSet* s2) {
@@ -81,6 +91,12 @@ void set_BitSet(BitSet* s, unsigned idx, bool b) {
 void clear_BitSet(BitSet* s) {
   for (unsigned i = 0; i < length_U64Vec(s->data); i++) {
     set_U64Vec(s->data, i, 0);
+  }
+}
+
+void fill_BitSet(BitSet* s) {
+  for (unsigned i = 0; i < length_U64Vec(s->data); i++) {
+    set_U64Vec(s->data, i, 0xFFFFFFFF);
   }
 }
 

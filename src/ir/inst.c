@@ -20,6 +20,10 @@ void release_Inst(Inst* inst) {
   release_RegVec(inst->rs);
   release_BitSet(inst->live_in);
   release_BitSet(inst->live_out);
+  release_BitSet(inst->reach_in);
+  release_BitSet(inst->reach_out);
+  release_BitSet(inst->available_in);
+  release_BitSet(inst->available_out);
   free(inst->label_name);
   free(inst->then_name);
   free(inst->else_name);
