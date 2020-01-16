@@ -3,6 +3,6 @@
 
 #include "ir.h"
 
-void optimize_dead_code_elimination(OIR*);
+void optimization_dead_code_elimination(OIR*);
 
 #endif

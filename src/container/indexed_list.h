@@ -35,10 +35,10 @@
   void release_##Name(Name* list);
 
 #define DEFINE_INDEXED_LIST(release_data, T, Name)                                                 \
-  DECLARE_LIST(T, Name##List)                                                                     \
-  DEFINE_LIST(release_data, T, Name##List)                                                        \
+  DECLARE_LIST(T, Name##List)                                                                      \
+  DEFINE_LIST(release_data, T, Name##List)                                                         \
   DECLARE_VECTOR(Name##ListIterator*, Name##IterRefVec)                                            \
-  DEFINE_VECTOR(release_void, Name##ListIterator*, Name##IterRefVec)                              \
+  DEFINE_VECTOR(release_void, Name##ListIterator*, Name##IterRefVec)                               \
   struct Name {                                                                                    \
     Name##List* list;                                                                              \
     Name##IterRefVec* iterators;                                                                   \
@@ -125,7 +125,7 @@
   Name* shallow_copy_##Name(const Name* list) {                                                    \
     Name* l      = malloc(sizeof(Name));                                                           \
     l->list      = shallow_copy_##Name##List(list->list);                                          \
-    l->iterators = shallow_copy_##Name##IterRefVec(list->iterators);                          \
+    l->iterators = shallow_copy_##Name##IterRefVec(list->iterators);                               \
     return l;                                                                                      \
   }                                                                                                \
   void release_##Name(Name* list) {                                                                \

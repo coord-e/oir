@@ -19,9 +19,6 @@ void data_flow_available_expression(OIR* ir) {
   compute_inst_available_sets(ir);
 }
 
-DECLARE_VECTOR(Inst*, InstRefVec)
-DEFINE_VECTOR(release_void, Inst*, InstRefVec)
-
 static bool is_expression(Inst* inst) {
   return inst->kind == IR_ADD || inst->kind == IR_EQUAL;
 }

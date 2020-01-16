@@ -10,6 +10,7 @@
 
 DECLARE_LIST(BasicBlock*, BBList)
 DECLARE_VECTOR(BitSet*, BSVec)
+DECLARE_VECTOR(Inst*, InstRefVec)
 
 typedef struct {
   BBList* blocks;
