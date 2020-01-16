@@ -5,6 +5,7 @@
 
 #include "data_flow.h"
 #include "ir.h"
+#include "optimization.h"
 #include "parser.h"
 
 static bool is_hyphen(const char* path) {
@@ -50,6 +51,7 @@ int main(int argc, char** argv) {
   data_flow_liveness(ir);
   data_flow_reaching_definition(ir);
   data_flow_available_expression(ir);
+  optimize_dead_code_elimination(ir);
   print_OIR(stdout, ir);
   release_OIR(ir);
   free(input);
