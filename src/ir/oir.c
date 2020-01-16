@@ -6,7 +6,7 @@ DEFINE_VECTOR(release_BitSet, BitSet*, BSVec)
 OIR* new_OIR() {
   OIR* ir          = calloc(1, sizeof(OIR));
   ir->blocks       = new_BBList();
-  ir->instructions = new_InstList();
+  ir->instructions = new_InstList(32);
   return ir;
 }
 

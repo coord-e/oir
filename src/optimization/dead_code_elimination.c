@@ -10,6 +10,6 @@ void optimize_dead_code_elimination(OIR* ir) {
       continue;
     }
 
-    it_inst = remove_InstListIterator(it_inst);
+    it_inst = remove_InstListIterator(ir->instructions, it_inst);
   }
 }

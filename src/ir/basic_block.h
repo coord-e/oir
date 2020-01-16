@@ -5,11 +5,12 @@
 
 #include "container/bit_set.h"
 #include "container/list.h"
+#include "container/indexed_list.h"
 #include "container/range.h"
 #include "ir/inst.h"
 
 DECLARE_LIST(BasicBlock*, BBRefList)
-DECLARE_LIST(Inst*, InstList)
+DECLARE_SELF_INDEXED_LIST(Inst*, InstList)
 DECLARE_RANGE(Inst*, InstList, InstRange)
 
 // `BasicBlock` forms a control flow graph

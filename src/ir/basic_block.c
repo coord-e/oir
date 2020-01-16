@@ -3,7 +3,10 @@
 #include "util.h"
 
 DEFINE_LIST(release_void, BasicBlock*, BBRefList)
-DEFINE_LIST(release_Inst, Inst*, InstList)
+static unsigned get_id(Inst* inst) {
+  return inst->id;
+}
+DEFINE_SELF_INDEXED_LIST(get_id, release_Inst, Inst*, InstList)
 DEFINE_RANGE(Inst*, InstList, InstRange)
 
 BasicBlock* new_BasicBlock(unsigned id) {
