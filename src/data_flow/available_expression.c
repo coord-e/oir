@@ -19,27 +19,6 @@ void data_flow_available_expression(OIR* ir) {
   compute_inst_available_sets(ir);
 }
 
-static bool is_expression(Inst* inst) {
-  return inst->kind == IR_ADD || inst->kind == IR_EQUAL;
-}
-
-static bool compare_expressions(Inst* a, Inst* b) {
-  assert(is_expression(a) && is_expression(b));
-
-  if (a->kind != b->kind) {
-    return false;
-  }
-
-  FOR_EACH_VEC (Reg*, ra, RegVec, a->rs) {
-    Reg* rb = get_RegVec(b->rs, i_ra);
-    if (ra->virtual != rb->virtual) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 static void compute_expression_id(InstRefVec* exprs, Inst* inst) {
   FOR_EACH_VEC (Inst*, cmpi, InstRefVec, exprs) {
     if (compare_expressions(cmpi, inst)) {

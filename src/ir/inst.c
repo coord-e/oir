@@ -81,3 +81,24 @@ void print_Inst(FILE* p, Inst* inst) {
       OIR_UNREACHABLE;
   }
 }
+
+bool is_expression(Inst* inst) {
+  return inst->kind == IR_ADD || inst->kind == IR_EQUAL;
+}
+
+bool compare_expressions(Inst* a, Inst* b) {
+  assert(is_expression(a) && is_expression(b));
+
+  if (a->kind != b->kind) {
+    return false;
+  }
+
+  FOR_EACH_VEC (Reg*, ra, RegVec, a->rs) {
+    Reg* rb = get_RegVec(b->rs, i_ra);
+    if (ra->virtual != rb->virtual) {
+      return false;
+    }
+  }
+
+  return true;
+}
