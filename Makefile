@@ -93,6 +93,10 @@ image: .image-built
 build.image: .image-built
 	$(DOCKER_RUN) make build
 
+.PHONY: style.image
+style.image: .image-built
+	$(DOCKER_RUN) make style
+
 .PHONY: test.image
 test.image: .image-built
 	$(DOCKER_RUN) make test
