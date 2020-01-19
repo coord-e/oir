@@ -170,3 +170,4 @@ tags
 # End of https://www.gitignore.io/api/c,linux,emacs,vim,macos
 
 build/
+.image-built

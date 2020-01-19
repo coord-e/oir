@@ -1,5 +1,9 @@
 BUILD_DIR ?= ./build
 SRC_DIR ?= ./src
+DEV_DIR ?= ./dev
+
+DOCKER ?= docker
+IMAGE_NAME ?= oir-dev
 
 CFLAGS ?= -Wall -std=c11 -pedantic -Isrc
 CPPFLAGS ?= -MMD -MP
@@ -23,9 +27,19 @@ DEPS := $(OBJS:.o=.d)
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/%.c$(OBJ_SUFFIX).o: %.c
+$(BUILD_DIR)/%.c$(OBJ_SUFFIX).o: %.c Makefile
 	mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+-include $(DEPS)
+
+
+########################################
+# helper phony targets
+########################################
+
+.PHONY: build
+build: $(BUILD_DIR)/$(TARGET_EXEC)
 
 .PHONY: test
 test: $(BUILD_DIR)/$(TARGET_EXEC)
@@ -44,6 +58,31 @@ watch:
 
 .PHONY: clean
 clean:
-	$(RM) -r $(BUILD_DIR)
+	-$(RM) -r $(BUILD_DIR)
+	-$(RM) .image-built
 
--include $(DEPS)
+
+########################################
+# targets to build in docker environment
+########################################
+
+DOCKER_RUN := $(DOCKER) run --rm -it -v $(CURDIR):/work $(IMAGE_NAME)
+
+.PHONY: image
+image: .image-built
+
+.image-built: $(DEV_DIR)/Dockerfile
+	$(DOCKER) build $(DEV_DIR) -t $(IMAGE_NAME)
+	touch .image-built
+
+.PHONY: build.image
+build.image: .image-built
+	$(DOCKER_RUN) make build
+
+.PHONY: test.image
+test.image: .image-built
+	$(DOCKER_RUN) make test
+
+.PHONY: watch.image
+watch.image: .image-built
+	$(DOCKER_RUN) make watch
