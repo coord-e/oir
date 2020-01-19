@@ -35,6 +35,13 @@ test: $(BUILD_DIR)/$(TARGET_EXEC)
 style:
 	find src -name '*.c' -or -name '*.h' | xargs clang-format -i
 
+.PHONY: watch
+watch:
+	while true; do \
+		make test; \
+		inotifywait -q -e close_write -r .; \
+	done
+
 .PHONY: clean
 clean:
 	$(RM) -r $(BUILD_DIR)
