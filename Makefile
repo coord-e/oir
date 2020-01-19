@@ -9,16 +9,24 @@ CFLAGS ?= -Wall -std=c11 -pedantic -Isrc
 CPPFLAGS ?= -MMD -MP
 
 DEBUG ?= 1
+SANITIZER ?= 0
+OBJ_SUFFIX ?=
+TARGET_EXEC ?= oir$(OBJ_SUFFIX)
+
+
 ifeq ($(DEBUG), 1)
-  CFLAGS += -O0 -g3 -fsanitize=address -fPIE
-  LDFLAGS += -fsanitize=address
-  OBJ_SUFFIX = .debug
+  CFLAGS += -O0 -g3
+	OBJ_SUFFIX := $(OBJ_SUFFIX).debug
 else
   CFLAGS += -O3
-  OBJ_SUFFIX =
 endif
 
-TARGET_EXEC ?= oir$(OBJ_SUFFIX)
+ifeq ($(SANITIZER), 1)
+	CFLAGS += -fsanitize=address -fPIE
+	LDFLAGS += -fsanitize=address
+	OBJ_SUFFIX := $(OBJ_SUFFIX).sanitized
+endif
+
 
 SRCS := $(shell find $(SRC_DIR) -name '*.c')
 OBJS := $(SRCS:%=$(BUILD_DIR)/%$(OBJ_SUFFIX).o)
@@ -28,7 +36,7 @@ $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.c$(OBJ_SUFFIX).o: %.c Makefile
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 -include $(DEPS)
@@ -52,7 +60,7 @@ style:
 .PHONY: watch
 watch:
 	while true; do \
-		make test; \
+		$(MAKE) test; \
 		inotifywait -q -e close_write -r .; \
 	done
 
@@ -66,7 +74,12 @@ clean:
 # targets to build in docker environment
 ########################################
 
-DOCKER_RUN := $(DOCKER) run --rm -it -v $(CURDIR):/work $(IMAGE_NAME)
+DOCKER_VARS := BUILD_DIR SRC_DIR DEV_DIR DEBUG SANITIZER TARGET_EXEC
+DOCKER_RUN := \
+	$(DOCKER) run --rm -it \
+		-v $(CURDIR):/work \
+		$(foreach v,$(DOCKER_VARS),-e $(v)="$($(v))") \
+		$(IMAGE_NAME)
 
 .PHONY: image
 image: .image-built
