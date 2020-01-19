@@ -94,7 +94,11 @@ void compute_global_available_sets(OIR* ir) {
     FOR_EACH (BasicBlock*, block, BBList, ir->blocks) {
       release_BitSet(block->available_in);
       block->available_in = new_BitSet(ir->expr_count);
-      fill_BitSet(block->available_in);
+      if (is_empty_BBRefList(block->preds)) {
+        clear_BitSet(block->available_in);
+      } else {
+        fill_BitSet(block->available_in);
+      }
 
       FOR_EACH (BasicBlock*, pre, BBRefList, block->preds) {
         and_BitSet(block->available_in, pre->available_out);
