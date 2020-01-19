@@ -74,7 +74,7 @@ clean:
 # targets to build in docker environment
 ########################################
 
-DOCKER_VARS := BUILD_DIR SRC_DIR DEV_DIR DEBUG SANITIZER TARGET_EXEC
+DOCKER_VARS := BUILD_DIR SRC_DIR DEV_DIR CC DEBUG SANITIZER TARGET_EXEC
 DOCKER_RUN := \
 	$(DOCKER) run --rm \
 		$(shell [ -t 0 ] && echo " -ti") \
