@@ -76,7 +76,8 @@ clean:
 
 DOCKER_VARS := BUILD_DIR SRC_DIR DEV_DIR DEBUG SANITIZER TARGET_EXEC
 DOCKER_RUN := \
-	$(DOCKER) run --rm -it \
+	$(DOCKER) run --rm \
+		$(shell [ -t 0 ] && echo " -ti") \
 		-v $(CURDIR):/work \
 		$(foreach v,$(DOCKER_VARS),-e $(v)="$($(v))") \
 		$(IMAGE_NAME)
