@@ -41,9 +41,8 @@ static void compute_local_live_sets(OIR* ir) {
 static void compute_global_live_sets(OIR* ir) {
   // temporary vector to detect changes in `live_in`
   BSVec* lasts = new_BSVec(ir->block_count);
-  for (unsigned i = 0; i < ir->block_count; i++) {
-    push_BSVec(lasts, NULL);
-  }
+  resize_BSVec(lasts, ir->block_count);
+  fill_BSVec(lasts, NULL);
 
   // initialization
   FOR_EACH (BasicBlock*, block, BBList, ir->blocks) {

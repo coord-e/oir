@@ -3,11 +3,11 @@
 #include <stdint.h>
 
 #include "container/vector.h"
-#include "util.h"
+#include "util/dummy.h"
+#include "util/error.h"
 
 DECLARE_VECTOR(uint64_t, U64Vec)
-static void release_u64(uint64_t l) {}
-DEFINE_VECTOR(release_u64, uint64_t, U64Vec)
+DEFINE_VECTOR(dummy_release_int, uint64_t, U64Vec)
 
 struct BitSet {
   U64Vec* data;

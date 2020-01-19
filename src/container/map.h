@@ -5,7 +5,7 @@
 
 #include "container/list.h"
 #include "container/vector.h"
-#include "util.h"
+#include "util/error.h"
 
 // hash table from string to `T`
 #define DECLARE_MAP(T, Name)                                                                       \

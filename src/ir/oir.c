@@ -1,8 +1,10 @@
 #include "ir/oir.h"
 
+#include "util/dummy.h"
+
 DEFINE_LIST(release_BasicBlock, BasicBlock*, BBList)
 DEFINE_VECTOR(release_BitSet, BitSet*, BSVec)
-DEFINE_VECTOR(release_void, Inst*, InstRefVec)
+DEFINE_VECTOR(dummy_release, Inst*, InstRefVec)
 
 OIR* new_OIR() {
   OIR* ir          = calloc(1, sizeof(OIR));

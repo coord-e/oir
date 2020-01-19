@@ -3,10 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "data_flow.h"
-#include "ir.h"
-#include "optimization.h"
-#include "parser.h"
+#include "data_flow/data_flow.h"
+#include "ir/ir.h"
+#include "optimization/optimization.h"
 
 static bool is_hyphen(const char* path) {
   return path[0] == '-' && path[1] == '\0';
@@ -47,7 +46,7 @@ static char* read_file(const char* path) {
 
 int main(int argc, char** argv) {
   char* input = read_file(argv[1]);
-  OIR* ir     = parse(input);
+  OIR* ir     = parse_OIR(input);
   data_flow_reaching_definition(ir);
   optimization_propagation(ir);
   data_flow_available_expression(ir);

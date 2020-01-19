@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "container/for_each.h"
+
 #define DECLARE_RANGE(T, TList, Name)                                                              \
   typedef struct {                                                                                 \
     TList##Iterator* from;                                                                         \

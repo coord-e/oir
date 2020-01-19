@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "util.h"
+#include "util/error.h"
 
 static Reg* new_Reg(RegKind kind) {
   Reg* r  = calloc(1, sizeof(Reg));

@@ -1,11 +1,7 @@
-#include "util.h"
+#include "util/string.h"
 
-#include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-void release_void(void* x) {}
 
 unsigned hash_string(const char* s) {
   unsigned hash = 0;
@@ -31,13 +27,4 @@ char* strdup(const char* s) {
   char* m     = malloc(size);
   strcpy(m, s);
   return m;
-}
-
-void error(char* fmt, ...) {
-  va_list ap;
-  va_start(ap, fmt);
-  fprintf(stderr, "ccc error: ");
-  vfprintf(stderr, fmt, ap);
-  fprintf(stderr, "\n");
-  exit(1);
 }

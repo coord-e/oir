@@ -4,8 +4,9 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "container/for_each.h"
 #include "container/list.h"
-#include "util.h"
+#include "util/error.h"
 
 #define DECLARE_INDEXED_LIST(T, Name)                                                              \
   typedef struct Name Name;                                                                        \
@@ -38,7 +39,7 @@
   DECLARE_LIST(T, Name##List)                                                                      \
   DEFINE_LIST(release_data, T, Name##List)                                                         \
   DECLARE_VECTOR(Name##ListIterator*, Name##IterRefVec)                                            \
-  DEFINE_VECTOR(release_void, Name##ListIterator*, Name##IterRefVec)                               \
+  DEFINE_VECTOR(dummy_release, Name##ListIterator*, Name##IterRefVec)                              \
   struct Name {                                                                                    \
     Name##List* list;                                                                              \
     Name##IterRefVec* iterators;                                                                   \

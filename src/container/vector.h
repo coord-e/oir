@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "container/for_each.h"
+
 #define DECLARE_VECTOR(T, Name)                                                                    \
   typedef struct Name Name;                                                                        \
   Name* new_##Name(unsigned capacity);                                                             \

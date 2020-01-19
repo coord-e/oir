@@ -1,8 +1,8 @@
 #include "ir/basic_block.h"
 
-#include "util.h"
+#include "util/dummy.h"
 
-DEFINE_LIST(release_void, BasicBlock*, BBRefList)
+DEFINE_LIST(dummy_release, BasicBlock*, BBRefList)
 static unsigned get_id(Inst* inst) {
   return inst->id;
 }

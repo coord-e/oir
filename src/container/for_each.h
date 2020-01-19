@@ -1,17 +1,5 @@
-#ifndef OIR_UTIL_H
-#define OIR_UTIL_H
-
-#include <stddef.h>
-#include <stdnoreturn.h>
-
-void release_void(void*);
-unsigned hash_string(const char*);
-char* strdup(const char* s);
-char* strndup(const char* s, size_t n);
-
-noreturn void error(char* fmt, ...);
-
-#define OIR_UNREACHABLE error("unreachable (%s:%d)", __FILE__, __LINE__)
+#ifndef OIR_CONTAINER_FOR_EACH_H
+#define OIR_CONTAINER_FOR_EACH_H
 
 // foreach macros.
 // NOTE that `continue` works properly in these macros, but `break` doesn't.

@@ -4,13 +4,12 @@
 #include <string.h>
 
 #include "container/map.h"
-#include "util.h"
+#include "util/dummy.h"
+#include "util/error.h"
+#include "util/string.h"
 
-static BasicBlock* dummy_copy(BasicBlock* block) {
-  return block;
-}
 DECLARE_MAP(BasicBlock*, BBMap)
-DEFINE_MAP(dummy_copy, release_void, BasicBlock*, BBMap)
+DEFINE_MAP(dummy_copy, dummy_release, BasicBlock*, BBMap)
 
 typedef struct {
   const char* cursor;
@@ -295,7 +294,7 @@ static OIR* finalize_Env(Env* env) {
   return ir;
 }
 
-OIR* parse(const char* p) {
+OIR* parse_OIR(const char* p) {
   Env* env = init_Env(p);
   while (*env->cursor) {
     skip_space(env);
