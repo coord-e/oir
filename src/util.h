@@ -13,6 +13,9 @@ noreturn void error(char* fmt, ...);
 
 #define OIR_UNREACHABLE error("unreachable (%s:%d)", __FILE__, __LINE__)
 
+// foreach macros.
+// NOTE that `continue` works properly in these macros, but `break` doesn't.
+
 #define FOR_EACH(T, item, Name, list)                                                              \
   for (bool keep = 1; keep; keep = !keep)                                                          \
     for (Name##Iterator* it_##item = front_##Name(list);                                           \
