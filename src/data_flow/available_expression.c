@@ -83,14 +83,13 @@ void compute_local_available_sets(OIR* ir) {
     block->available_kill = new_BitSet(ir->expr_count);
 
     FOR_EACH (Inst*, inst, InstRange, block->instructions) {
-      if (is_expression(inst)) {
-        if (!get_BitSet(block->available_kill, inst->expression_id)) {
-          set_BitSet(block->available_gen, inst->expression_id, true);
-        }
-      }
       if (inst->rd != NULL) {
         BitSet* kill = get_BSVec(ir->kill_expressions, inst->rd->virtual);
         or_BitSet(block->available_kill, kill);
+      }
+      if (is_expression(inst)) {
+        set_BitSet(block->available_kill, inst->expression_id, false);
+        set_BitSet(block->available_gen, inst->expression_id, true);
       }
     }
   }
