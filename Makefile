@@ -6,9 +6,8 @@ CPPFLAGS ?= -MMD -MP
 
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)
-  CC = clang
-  CFLAGS += -O0 -g3 -fsanitize=memory -fPIE
-  LDFLAGS += -fsanitize=memory
+  CFLAGS += -O0 -g3 -fsanitize=address -fPIE
+  LDFLAGS += -fsanitize=address
   OBJ_SUFFIX = .debug
 else
   CFLAGS += -O3
