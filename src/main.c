@@ -15,12 +15,35 @@
 
 typedef enum {
   INPUT_TEXT,
-} InputKind;
+} InputFormat;
+
+static void print_InputFormat(FILE* f, InputFormat k) {
+  switch (k) {
+    case INPUT_TEXT:
+      fputs("text", f);
+      break;
+    default:
+      OIR_UNREACHABLE;
+  }
+}
 
 typedef enum {
   OUTPUT_TEXT,
   OUTPUT_GRAPH,
-} OutputKind;
+} OutputFormat;
+
+static void print_OutputFormat(FILE* f, OutputFormat k) {
+  switch (k) {
+    case OUTPUT_TEXT:
+      fputs("text", f);
+      break;
+    case OUTPUT_GRAPH:
+      fputs("graph", f);
+      break;
+    default:
+      OIR_UNREACHABLE;
+  }
+}
 
 typedef enum {
   PROC_ANALYZE_LIVENESS,
@@ -31,8 +54,42 @@ typedef enum {
   PROC_OPTIMIZE_COMMOM_SUBEXPRESSION_ELIMINATION,
 } Procedure;
 
+static void print_Procedure(FILE* f, Procedure p) {
+  switch (p) {
+    case PROC_ANALYZE_LIVENESS:
+      fputs("liveness", f);
+      break;
+    case PROC_ANALYZE_REACHING_DEFINITION:
+      fputs("reaching_definition", f);
+      break;
+    case PROC_ANALYZE_AVAILABLE_EXPRESSION:
+      fputs("available_expression", f);
+      break;
+    case PROC_OPTIMIZE_DEAD_CODE_ELIMINATION:
+      fputs("dead_code_elimination", f);
+      break;
+    case PROC_OPTIMIZE_PROPAGATION:
+      fputs("propagation", f);
+      break;
+    case PROC_OPTIMIZE_COMMOM_SUBEXPRESSION_ELIMINATION:
+      fputs("common_subexpression_elimination", f);
+      break;
+    default:
+      OIR_UNREACHABLE;
+  }
+}
+
 DECLARE_LIST(Procedure, ProcList)
 DEFINE_LIST(dummy_release_int, Procedure, ProcList)
+
+static void print_ProcList(FILE* f, ProcList* list) {
+  FOR_EACH (Procedure, p, ProcList, list) {
+    print_Procedure(f, p);
+    if (!is_nil_ProcListIterator(next_ProcListIterator(it_p))) {
+      fprintf(f, ",");
+    }
+  }
+}
 
 static ProcList* parse_procedures(const char* input) {
   ProcList* list = new_ProcList();
@@ -77,10 +134,10 @@ static ProcList* parse_procedures(const char* input) {
 
 typedef struct {
   char* input_file;
-  InputKind input_format;
+  InputFormat input_format;
 
   char* output_file;
-  OutputKind output_format;
+  OutputFormat output_format;
 
   ProcList* procedures;
   unsigned number_of_loops;
@@ -107,6 +164,46 @@ static void release_Options(Options* opts) {
   free(opts->output_file);
   release_ProcList(opts->procedures);
   free(opts);
+}
+
+static void print_unsigned(FILE* f, unsigned i) {
+  fprintf(f, "%u", i);
+}
+
+static void print_string(FILE* f, const char* s) {
+  fprintf(f, "%s", s);
+}
+
+static void print_bool(FILE* f, bool b) {
+  if (b) {
+    fprintf(f, "true");
+  } else {
+    fprintf(f, "false");
+  }
+}
+
+static void print_Options_with_indent(FILE* f, Options* opts, int indent) {
+#define PRINT_OPTION(opt, member, print_function)                                                  \
+  fprintf(f, "%*s%s [%s (", indent, "", opt, #member);                                             \
+  print_function(f, opts->member);                                                                 \
+  fprintf(f, ")]\n");
+
+  PRINT_OPTION("-i", input_file, print_string)
+  PRINT_OPTION("-f", input_format, print_InputFormat)
+  PRINT_OPTION("-o", output_file, print_string)
+  PRINT_OPTION("-g", output_format, print_OutputFormat)
+  PRINT_OPTION("-p", procedures, print_ProcList)
+  PRINT_OPTION("-l", number_of_loops, print_unsigned)
+  PRINT_OPTION("-h", help, print_bool)
+
+#undef PRINT_OPTION
+}
+
+static void print_usage(FILE* f, const char* program) {
+  fprintf(f, "usage: %s [options]\n\n", program);
+  Options* default_opts = new_Options();
+  print_Options_with_indent(f, default_opts, 4);
+  release_Options(default_opts);
 }
 
 static void parse_args(int argc, char** argv, Options* opts) {
@@ -149,7 +246,8 @@ static void parse_args(int argc, char** argv, Options* opts) {
         opts->help = true;
         break;
       case '?':
-        error("could not parse command line arguments");
+        print_usage(stderr, argv[0]);
+        exit(1);
         break;
       default:
         OIR_UNREACHABLE;
@@ -218,6 +316,11 @@ static void run_procedures(Options* opts, OIR* ir) {
 int main(int argc, char** argv) {
   Options* opts = new_Options();
   parse_args(argc, argv, opts);
+
+  if (opts->help) {
+    print_usage(stdout, argv[0]);
+    exit(0);
+  }
 
   OIR* ir = input(opts);
   run_procedures(opts, ir);
