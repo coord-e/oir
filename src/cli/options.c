@@ -1,6 +1,5 @@
 #include "cli/options.h"
 
-#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

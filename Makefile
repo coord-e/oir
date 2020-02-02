@@ -5,7 +5,7 @@ DEV_DIR ?= ./dev
 DOCKER ?= docker
 IMAGE_NAME ?= oir-dev
 
-CFLAGS ?= -Wall -std=c11 -pedantic -Isrc
+CFLAGS ?= -Wall -std=c11 -pedantic -Isrc -D_POSIX_C_SOURCE=2
 CPPFLAGS ?= -MMD -MP
 
 DEBUG ?= 1
