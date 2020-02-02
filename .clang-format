@@ -4,6 +4,7 @@ AlignConsecutiveAssignments: true
 AlignTrailingComments: true
 AlignEscapedNewlinesLeft: false
 BreakBeforeBraces: Attach
+AllowShortBlocksOnASingleLine: true
 UseTab: Never
 ColumnLimit: 100
 ForEachMacros: ['FOR_EACH', 'FOR_EACH_BACK', 'FOR_EACH_VEC']
