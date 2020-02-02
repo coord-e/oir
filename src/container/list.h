@@ -1,6 +1,7 @@
 #ifndef OIR_CONTAINER_LIST_H
 #define OIR_CONTAINER_LIST_H
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
