@@ -2,6 +2,7 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "data_flow/data_flow.h"
@@ -17,7 +18,7 @@ typedef enum {
 
 typedef enum {
   OUTPUT_TEXT,
-  OUTPUT_GRAPHVIZ,
+  OUTPUT_GRAPH,
 } OutputKind;
 
 typedef struct {
@@ -51,7 +52,7 @@ static void release_Options(Options* opts) {
 static void parse_args(int argc, char** argv, Options* opts) {
   int c;
   opterr = 1;
-  while ((c = getopt(argc, argv, "i:o:h")) != -1) {
+  while ((c = getopt(argc, argv, "i:o:f:g:h")) != -1) {
     switch (c) {
       case 'i':
         free(opts->input_file);
@@ -60,6 +61,22 @@ static void parse_args(int argc, char** argv, Options* opts) {
       case 'o':
         free(opts->output_file);
         opts->output_file = strdup(optarg);
+        break;
+      case 'f':
+        if (strcmp(optarg, "text") == 0) {
+          opts->input_format = INPUT_TEXT;
+        } else {
+          error("unknown input format: %s", optarg);
+        }
+        break;
+      case 'g':
+        if (strcmp(optarg, "text") == 0) {
+          opts->output_format = OUTPUT_TEXT;
+        } else if (strcmp(optarg, "graph") == 0) {
+          opts->output_format = OUTPUT_GRAPH;
+        } else {
+          error("unknown output format: %s", optarg);
+        }
         break;
       case 'h':
         opts->help = true;
@@ -93,7 +110,7 @@ static void output(Options* opts, OIR* ir) {
     case OUTPUT_TEXT:
       print_OIR(f, ir);
       break;
-    case OUTPUT_GRAPHVIZ:
+    case OUTPUT_GRAPH:
       print_graph_OIR(f, ir);
       break;
     default:
