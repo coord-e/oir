@@ -1,14 +1,11 @@
-#include <ctype.h>
-#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 #include "cli/options.h"
 #include "data_flow/data_flow.h"
 #include "ir/ir.h"
 #include "optimization/optimization.h"
+#include "util/error.h"
 #include "util/io.h"
 
 static OIR* input(Options* opts) {
