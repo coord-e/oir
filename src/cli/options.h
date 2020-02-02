@@ -3,7 +3,7 @@
 
 #include "cli/input_format.h"
 #include "cli/output_format.h"
-#include "cli/proc_list.h"
+#include "cli/pass_list.h"
 
 typedef struct {
   char* input_file;
@@ -12,7 +12,7 @@ typedef struct {
   char* output_file;
   OutputFormat output_format;
 
-  ProcList* procedures;
+  PassList* passes;
   unsigned number_of_loops;
 
   bool help;

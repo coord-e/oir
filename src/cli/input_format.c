@@ -19,6 +19,6 @@ InputFormat parse_InputFormat(const char* input) {
   if (strcmp(input, "text") == 0) {
     return INPUT_TEXT;
   } else {
-    error("unknown input format: %s", input);
+    error("unknown input format: %s (available formats: text)", input);
   }
 }

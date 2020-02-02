@@ -6,7 +6,7 @@
 
 #include "cli/input_format.h"
 #include "cli/output_format.h"
-#include "cli/proc_list.h"
+#include "cli/pass_list.h"
 #include "util/convention.h"
 #include "util/string.h"
 
@@ -16,7 +16,7 @@ Options* default_Options() {
   opts->input_format    = INPUT_TEXT;
   opts->output_file     = strdup("-");
   opts->output_format   = OUTPUT_TEXT;
-  opts->procedures      = parse_ProcList("reach,prop,available,cse,liveness,dce");
+  opts->passes          = parse_PassList("reach,prop,available,cse,liveness,dce");
   opts->number_of_loops = 1;
   return opts;
 }
@@ -27,7 +27,7 @@ void release_Options(Options* opts) {
   }
   free(opts->input_file);
   free(opts->output_file);
-  release_ProcList(opts->procedures);
+  release_PassList(opts->passes);
   free(opts);
 }
 
@@ -41,7 +41,7 @@ static void print_Options_with_indent(FILE* f, Options* opts, int indent) {
   PRINT_OPTION("-f", input_format, print_InputFormat)
   PRINT_OPTION("-o", output_file, print_string)
   PRINT_OPTION("-g", output_format, print_OutputFormat)
-  PRINT_OPTION("-p", procedures, print_ProcList)
+  PRINT_OPTION("-p", passes, print_PassList)
   PRINT_OPTION("-l", number_of_loops, print_unsigned)
   PRINT_OPTION("-h", help, print_bool)
 
@@ -81,8 +81,8 @@ Options* parse_args(int argc, char** argv) {
         opts->output_format = parse_OutputFormat(optarg);
         break;
       case 'p':
-        release_ProcList(opts->procedures);
-        opts->procedures = parse_ProcList(optarg);
+        release_PassList(opts->passes);
+        opts->passes = parse_PassList(optarg);
         break;
       case 'l':
         opts->number_of_loops = strtol(optarg, NULL, 10);

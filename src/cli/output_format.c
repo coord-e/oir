@@ -24,6 +24,6 @@ OutputFormat parse_OutputFormat(const char* input) {
   } else if (strcmp(input, "graph") == 0) {
     return OUTPUT_GRAPH;
   } else {
-    error("unknown output format: %s", input);
+    error("unknown output format: %s (available formats: text, graph)", input);
   }
 }

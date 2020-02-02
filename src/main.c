@@ -37,26 +37,26 @@ static void output(Options* opts, OIR* ir) {
   close_file(f, opts->output_file);
 }
 
-static void run_procedures(Options* opts, OIR* ir) {
+static void run_passes(Options* opts, OIR* ir) {
   for (unsigned i = 0; i < opts->number_of_loops; i++) {
-    FOR_EACH (Procedure, p, ProcList, opts->procedures) {
+    FOR_EACH (Pass, p, PassList, opts->passes) {
       switch (p) {
-        case PROC_ANALYZE_LIVENESS:
+        case PASS_ANALYZE_LIVENESS:
           data_flow_liveness(ir);
           break;
-        case PROC_ANALYZE_REACHING_DEFINITION:
+        case PASS_ANALYZE_REACHING_DEFINITION:
           data_flow_reaching_definition(ir);
           break;
-        case PROC_ANALYZE_AVAILABLE_EXPRESSION:
+        case PASS_ANALYZE_AVAILABLE_EXPRESSION:
           data_flow_available_expression(ir);
           break;
-        case PROC_OPTIMIZE_DEAD_CODE_ELIMINATION:
+        case PASS_OPTIMIZE_DEAD_CODE_ELIMINATION:
           optimization_dead_code_elimination(ir);
           break;
-        case PROC_OPTIMIZE_PROPAGATION:
+        case PASS_OPTIMIZE_PROPAGATION:
           optimization_propagation(ir);
           break;
-        case PROC_OPTIMIZE_COMMOM_SUBEXPRESSION_ELIMINATION:
+        case PASS_OPTIMIZE_COMMOM_SUBEXPRESSION_ELIMINATION:
           optimization_common_subexpression_elimination(ir);
           break;
         default:
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
   }
 
   OIR* ir = input(opts);
-  run_procedures(opts, ir);
+  run_passes(opts, ir);
   output(opts, ir);
 
   release_OIR(ir);
