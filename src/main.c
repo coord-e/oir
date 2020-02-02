@@ -83,17 +83,19 @@ typedef struct {
   OutputKind output_format;
 
   ProcList* procedures;
+  unsigned number_of_loops;
 
   bool help;
 } Options;
 
 static Options* new_Options() {
-  Options* opts       = calloc(1, sizeof(Options));
-  opts->input_file    = strdup("-");
-  opts->input_format  = INPUT_TEXT;
-  opts->output_file   = strdup("-");
-  opts->output_format = OUTPUT_TEXT;
-  opts->procedures    = parse_procedures("reach,prop,available,cse,liveness,dce");
+  Options* opts         = calloc(1, sizeof(Options));
+  opts->input_file      = strdup("-");
+  opts->input_format    = INPUT_TEXT;
+  opts->output_file     = strdup("-");
+  opts->output_format   = OUTPUT_TEXT;
+  opts->procedures      = parse_procedures("reach,prop,available,cse,liveness,dce");
+  opts->number_of_loops = 1;
   return opts;
 }
 
@@ -110,7 +112,7 @@ static void release_Options(Options* opts) {
 static void parse_args(int argc, char** argv, Options* opts) {
   int c;
   opterr = 1;
-  while ((c = getopt(argc, argv, "i:o:f:g:p:h")) != -1) {
+  while ((c = getopt(argc, argv, "i:o:f:g:p:l:h")) != -1) {
     switch (c) {
       case 'i':
         free(opts->input_file);
@@ -139,6 +141,9 @@ static void parse_args(int argc, char** argv, Options* opts) {
       case 'p':
         release_ProcList(opts->procedures);
         opts->procedures = parse_procedures(optarg);
+        break;
+      case 'l':
+        opts->number_of_loops = strtol(optarg, NULL, 10);
         break;
       case 'h':
         opts->help = true;
@@ -182,28 +187,30 @@ static void output(Options* opts, OIR* ir) {
 }
 
 static void run_procedures(Options* opts, OIR* ir) {
-  FOR_EACH (Procedure, p, ProcList, opts->procedures) {
-    switch (p) {
-      case PROC_ANALYZE_LIVENESS:
-        data_flow_liveness(ir);
-        break;
-      case PROC_ANALYZE_REACHING_DEFINITION:
-        data_flow_reaching_definition(ir);
-        break;
-      case PROC_ANALYZE_AVAILABLE_EXPRESSION:
-        data_flow_available_expression(ir);
-        break;
-      case PROC_OPTIMIZE_DEAD_CODE_ELIMINATION:
-        optimization_dead_code_elimination(ir);
-        break;
-      case PROC_OPTIMIZE_PROPAGATION:
-        optimization_propagation(ir);
-        break;
-      case PROC_OPTIMIZE_COMMOM_SUBEXPRESSION_ELIMINATION:
-        optimization_common_subexpression_elimination(ir);
-        break;
-      default:
-        OIR_UNREACHABLE;
+  for (unsigned i = 0; i < opts->number_of_loops; i++) {
+    FOR_EACH (Procedure, p, ProcList, opts->procedures) {
+      switch (p) {
+        case PROC_ANALYZE_LIVENESS:
+          data_flow_liveness(ir);
+          break;
+        case PROC_ANALYZE_REACHING_DEFINITION:
+          data_flow_reaching_definition(ir);
+          break;
+        case PROC_ANALYZE_AVAILABLE_EXPRESSION:
+          data_flow_available_expression(ir);
+          break;
+        case PROC_OPTIMIZE_DEAD_CODE_ELIMINATION:
+          optimization_dead_code_elimination(ir);
+          break;
+        case PROC_OPTIMIZE_PROPAGATION:
+          optimization_propagation(ir);
+          break;
+        case PROC_OPTIMIZE_COMMOM_SUBEXPRESSION_ELIMINATION:
+          optimization_common_subexpression_elimination(ir);
+          break;
+        default:
+          OIR_UNREACHABLE;
+      }
     }
   }
 }
