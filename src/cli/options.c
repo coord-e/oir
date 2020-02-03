@@ -33,9 +33,9 @@ void release_Options(Options* opts) {
 
 static void print_Options_with_indent(FILE* f, Options* opts, int indent) {
 #define PRINT_OPTION(opt, member, print_function)                                                  \
-  fprintf(f, "%*s%s [%s (", indent, "", opt, #member);                                             \
+  fprintf(f, "%*s%s %-20s (default: \"", indent, "", opt, #member);                                \
   print_function(f, opts->member);                                                                 \
-  fprintf(f, ")]\n");
+  fprintf(f, "\")\n");
 
   PRINT_OPTION("-i", input_file, print_string)
   PRINT_OPTION("-f", input_format, print_InputFormat)
