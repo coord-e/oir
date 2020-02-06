@@ -50,21 +50,22 @@ typedef struct {
   char* buffer;
   char* cursor;
   size_t chunk_size;
-  size_t last_read_size;
+  size_t actual_size;
 } Buffer;
 
 static Buffer* new_Buffer(size_t chunk_size) {
-  Buffer* buf     = malloc(sizeof(Buffer));
-  buf->buffer     = malloc(chunk_size);
-  buf->cursor     = buf->buffer;
-  buf->chunk_size = chunk_size;
+  Buffer* buf      = malloc(sizeof(Buffer));
+  buf->buffer      = malloc(chunk_size);
+  buf->cursor      = buf->buffer;
+  buf->chunk_size  = chunk_size;
+  buf->actual_size = -1;
   return buf;
 }
 
 static char* finalize_Buffer(Buffer* buf) {
-  size_t buffer_size      = buf->cursor - buf->buffer + buf->last_read_size + 1;
-  char* result            = realloc(buf->buffer, buffer_size);
-  result[buffer_size - 1] = 0;
+  assert(buf->actual_size != -1);
+  char* result                 = realloc(buf->buffer, buf->actual_size);
+  result[buf->actual_size - 1] = 0;
 
   free(buf);
   return result;
@@ -80,9 +81,10 @@ static void extend_buffer(Buffer* buf) {
 }
 
 static bool read_chunk(Buffer* buf, FILE* f) {
-  buf->last_read_size = fread(buf->cursor, 1, buf->chunk_size, f);
+  size_t read_size = fread(buf->cursor, 1, buf->chunk_size, f);
+  buf->actual_size = buf->cursor - buf->buffer + read_size + 1;
   extend_buffer(buf);
-  return buf->last_read_size == buf->chunk_size;
+  return read_size == buf->chunk_size;
 }
 
 char* read_file(const char* path) {
