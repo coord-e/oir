@@ -20,7 +20,7 @@ function run_command() {
     return 1
   fi
 
-  eval "$command -i "$target""
+  eval "$command -i \"$target\""
 }
 
 function main() {
