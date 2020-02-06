@@ -1,0 +1,14 @@
+# test: "$OIR_BIN" -p liveness,dce
+LABEL entry
+  v1 = IMM 10  # dead
+  v2 = IMM 20  # dead
+  v2 = IMM 30
+  JUMP loop
+LABEL loop
+  v3 = IMM 10
+  v4 = EQUAL v2 v3
+  v2 = IMM 10  # not dead
+  BRANCH v4 end loop
+LABEL end
+  v5 = IMM 20
+  RETURN v5

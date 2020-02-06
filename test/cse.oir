@@ -1,0 +1,16 @@
+# test: "$OIR_BIN" -p available,cse
+LABEL entry
+  v1 = IMM 1
+  BRANCH v1 label1 label2
+LABEL label1
+  v3 = ADD v1 v1
+  JUMP join
+LABEL label2
+  v5 = ADD v1 v1
+  JUMP join
+LABEL join
+  v6 = ADD v1 v1
+  v7 = ADD v3 v6
+  v8 = ADD v5 v6
+  v9 = ADD v7 v8
+  RETURN v9

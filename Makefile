@@ -51,7 +51,7 @@ build: $(BUILD_DIR)/$(TARGET_EXEC)
 
 .PHONY: test
 test: $(BUILD_DIR)/$(TARGET_EXEC)
-	echo "not implemented"
+	OIR_BIN=$(BUILD_DIR)/$(TARGET_EXEC) ./dev/test.sh
 
 .PHONY: style
 style:

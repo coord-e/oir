@@ -1,0 +1,25 @@
+# OIR entry=0, exit=3
+# BB0 succs={1, 2} preds={}
+LABEL entry  # 0
+  v1 = IMM 1
+  BRANCH v1 label1 label2  # 1, 2
+# BB1 succs={3} preds={0}
+LABEL label1  # 1
+  v3 = ADD v1 v1
+  v10 = MOV v3
+  JUMP join  # 3
+# BB2 succs={3} preds={0}
+LABEL label2  # 2
+  v5 = ADD v1 v1
+  v10 = MOV v5
+  JUMP join  # 3
+# BB3 succs={} preds={1, 2}
+LABEL join  # 3
+  v6 = MOV v10
+  v7 = ADD v3 v6
+  v11 = MOV v7
+  v8 = ADD v5 v6
+  v12 = MOV v8
+  v9 = ADD v7 v8
+  v13 = MOV v9
+  RETURN v9
