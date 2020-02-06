@@ -61,7 +61,7 @@ style:
 watch:
 	while true; do \
 		$(MAKE) test; \
-		inotifywait -q -e close_write -r .; \
+		inotifywait -q -e close_write --exclude '\.git' -r .; \
 	done
 
 .PHONY: clean
