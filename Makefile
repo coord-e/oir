@@ -22,7 +22,7 @@ else
 endif
 
 ifeq ($(SANITIZER), 1)
-	CFLAGS += -fsanitize=address -fPIE
+	CFLAGS += -fsanitize=address -fPIE -fno-omit-frame-pointer
 	LDFLAGS += -fsanitize=address
 	OBJ_SUFFIX := $(OBJ_SUFFIX).sanitized
 endif
@@ -51,7 +51,7 @@ build: $(BUILD_DIR)/$(TARGET_EXEC)
 
 .PHONY: test
 test: $(BUILD_DIR)/$(TARGET_EXEC)
-	OIR_BIN=$(BUILD_DIR)/$(TARGET_EXEC) ./dev/test.sh
+	OIR_BIN=$(BUILD_DIR)/$(TARGET_EXEC) $(DEV_DIR)/test.sh
 
 .PHONY: style
 style:
@@ -74,6 +74,7 @@ clean:
 # targets to build in docker environment
 ########################################
 
+DOCKERFILE := $(DEV_DIR)/Dockerfile
 DOCKER_VARS := ACCEPT BUILD_DIR SRC_DIR DEV_DIR CC DEBUG SANITIZER ASAN_OPTIONS TARGET_EXEC
 DOCKER_RUN := \
 	$(DOCKER) run --rm \
@@ -85,9 +86,9 @@ DOCKER_RUN := \
 .PHONY: image
 image: .image-built
 
-.image-built: $(DEV_DIR)/Dockerfile
-	$(DOCKER) build $(DEV_DIR) -t $(IMAGE_NAME)
-	touch .image-built
+.image-built: $(DOCKERFILE)
+	$(DOCKER) build $(dir $(DOCKERFILE)) -f $(DOCKERFILE) -t $(IMAGE_NAME)
+	@touch .image-built
 
 .PHONY: build.docker
 build.docker: .image-built
