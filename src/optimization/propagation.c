@@ -60,14 +60,12 @@ void optimization_propagation(OIR* ir) {
           if (def->imm) {
             inst->jump      = inst->then_;
             inst->jump_name = inst->then_name;
-            inst->then_     = NULL;
-            inst->then_name = NULL;
           } else {
             inst->jump      = inst->else_;
             inst->jump_name = inst->else_name;
-            inst->else_     = NULL;
-            inst->else_name = NULL;
           }
+          inst->then_ = inst->else_ = NULL;
+          inst->then_name = inst->else_name = NULL;
           resize_RegVec(inst->rs, 0);
         }
         break;
