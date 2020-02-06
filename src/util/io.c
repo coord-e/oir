@@ -90,7 +90,7 @@ static bool read_chunk(Buffer* buf, FILE* f) {
 char* read_file(const char* path) {
   FILE* f = open_file(path, "rb");
 
-  Buffer* buf = new_Buffer(5);
+  Buffer* buf = new_Buffer(512);
   while (read_chunk(buf, f)) {}
   char* result = finalize_Buffer(buf);
 
