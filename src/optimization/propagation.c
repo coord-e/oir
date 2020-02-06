@@ -8,6 +8,7 @@ static bool get_one_definition(OIR* ir, Inst* inst, Reg* r, Inst** out) {
   }
   unsigned id = mssb_BitSet(defs);
   *out        = get_InstList(ir->instructions, id);
+  release_BitSet(defs);
   return true;
 }
 

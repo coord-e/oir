@@ -113,5 +113,6 @@ static void compute_inst_reach_sets(OIR* ir) {
       inst->reach_out = copy_BitSet(reach);
     }
     assert(equal_to_BitSet(block->reach_out, reach));
+    release_BitSet(reach);
   }
 }

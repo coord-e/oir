@@ -137,5 +137,6 @@ void compute_inst_available_sets(OIR* ir) {
       inst->available_out = copy_BitSet(available);
     }
     assert(equal_to_BitSet(block->available_out, available));
+    release_BitSet(available);
   }
 }
