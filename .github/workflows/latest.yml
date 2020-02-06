@@ -16,7 +16,7 @@ jobs:
             sanitizer: 1
     steps:
     - uses: actions/checkout@master
-    - run: make test.image
+    - run: make test.docker
       env:
         DEBUG: ${{ matrix.debug }}
         SANITIZER: ${{ matrix.sanitizer }}
@@ -26,5 +26,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - run: make style.image
+    - run: make style.docker
     - run: git diff --exit-code

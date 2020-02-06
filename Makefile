@@ -74,7 +74,7 @@ clean:
 # targets to build in docker environment
 ########################################
 
-DOCKER_VARS := BUILD_DIR SRC_DIR DEV_DIR CC DEBUG SANITIZER TARGET_EXEC
+DOCKER_VARS := ACCEPT BUILD_DIR SRC_DIR DEV_DIR CC DEBUG SANITIZER TARGET_EXEC
 DOCKER_RUN := \
 	$(DOCKER) run --rm \
 		$(shell [ -t 0 ] && echo " -ti") \
@@ -89,18 +89,18 @@ image: .image-built
 	$(DOCKER) build $(DEV_DIR) -t $(IMAGE_NAME)
 	touch .image-built
 
-.PHONY: build.image
-build.image: .image-built
+.PHONY: build.docker
+build.docker: .image-built
 	$(DOCKER_RUN) make build
 
-.PHONY: style.image
-style.image: .image-built
+.PHONY: style.docker
+style.docker: .image-built
 	$(DOCKER_RUN) make style
 
-.PHONY: test.image
-test.image: .image-built
+.PHONY: test.docker
+test.docker: .image-built
 	$(DOCKER_RUN) make test
 
-.PHONY: watch.image
-watch.image: .image-built
+.PHONY: watch.docker
+watch.docker: .image-built
 	$(DOCKER_RUN) make watch
