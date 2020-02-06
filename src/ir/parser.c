@@ -296,11 +296,14 @@ static OIR* finalize_Env(Env* env) {
 
 OIR* parse_OIR(const char* p) {
   Env* env = init_Env(p);
+
+  skip_space(env);
+  skip_comment(env);
+  skip_space(env);
   while (*env->cursor) {
-    skip_space(env);
-    skip_comment(env);
     parse_Inst(env);
     skip_comment(env);
+    skip_space(env);
   }
   env->current_block->instructions->to = back_InstList(env->ir->instructions);
   resolve_labels(env);
