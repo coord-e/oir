@@ -251,10 +251,16 @@ static Inst* parse_Inst(Env* env) {
 }
 
 static void resolve_labels(Env* env) {
-  BasicBlock* cur = env->ir->entry;
+  BasicBlock* cur = NULL;
   FOR_EACH (Inst*, inst, InstList, env->ir->instructions) {
+    if (cur == NULL && inst->kind != IR_LABEL) {
+      error("LABEL instruction is expected to start a basic block");
+    }
     switch (inst->kind) {
       case IR_LABEL:
+        if (cur != NULL) {
+          error("unexpected LABEL instruction. block %d is not terminated.", cur->id);
+        }
         cur = inst->label;
         break;
       case IR_BRANCH:
@@ -266,16 +272,24 @@ static void resolve_labels(Env* env) {
         }
         connect_BasicBlock(cur, inst->then_);
         connect_BasicBlock(cur, inst->else_);
+        cur = NULL;
         break;
       case IR_JUMP:
         if (!lookup_BBMap(env->block_map, inst->jump_name, &inst->jump)) {
           error("could not find label %s", inst->jump_name);
         }
         connect_BasicBlock(cur, inst->jump);
+        cur = NULL;
+        break;
+      case IR_RETURN:
+        cur = NULL;
         break;
       default:
         break;
     }
+  }
+  if (cur != NULL) {
+    error("unexpected end of file. block %d is not terminated.", cur->id);
   }
 }
 
