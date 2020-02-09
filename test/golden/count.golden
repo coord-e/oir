@@ -1,17 +1,17 @@
 # OIR entry=0, exit=2
 # BB0 succs={1} preds={}
 LABEL entry  # 0
-  v1 = IMM 0
-  v2 = IMM 10
-  v3 = IMM 0
+  r1 = IMM 0
+  r2 = IMM 10
+  r3 = IMM 0
   JUMP loop  # 1
 # BB1 succs={2, 1} preds={0, 1}
 LABEL loop  # 1
-  v4 = IMM 1
-  v1 = ADD v1 v4
-  v3 = ADD v3 v1
-  v5 = EQUAL v1 v2
-  BRANCH v5 end loop  # 2, 1
+  r4 = IMM 1
+  r1 = ADD r1 r4
+  r3 = ADD r3 r1
+  r5 = EQUAL r1 r2
+  BRANCH r5 end loop  # 2, 1
 # BB2 succs={} preds={1}
 LABEL end  # 2
-  RETURN v3
+  RETURN r3

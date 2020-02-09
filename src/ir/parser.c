@@ -60,7 +60,7 @@ static char* parse_ident(Env* env) {
 }
 
 static Reg* parse_Reg(Env* env) {
-  parse_char(env, 'v');
+  parse_char(env, 'r');
   unsigned id = parse_number(env);
 
   if (id >= env->ir->reg_count) {
@@ -217,7 +217,7 @@ static Inst* parse_return(Env* env, Reg* rd) {
 
 static Inst* parse_Inst(Env* env) {
   Reg* rd = NULL;
-  if (*env->cursor == 'v') {
+  if (*env->cursor == 'r') {
     rd = parse_destination(env);
   }
 

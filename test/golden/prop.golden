@@ -1,21 +1,21 @@
 # OIR entry=0, exit=3
 # BB0 succs={1, 2} preds={}
 LABEL entry  # 0
-  v1 = IMM 10
-  v2 = IMM 10
-  v3 = IMM 20
+  r1 = IMM 10
+  r2 = IMM 10
+  r3 = IMM 20
   JUMP a  # 1
 # BB1 succs={3} preds={0}
 LABEL a  # 1
-  v4 = IMM 1
+  r4 = IMM 1
   JUMP end  # 3
 # BB2 succs={3} preds={0}
 LABEL b  # 2
-  v4 = IMM 2
+  r4 = IMM 2
   JUMP end  # 3
 # BB3 succs={} preds={1, 2}
 LABEL end  # 3
-  v5 = MOV v4
-  v6 = IMM 20
-  v7 = IMM 40
-  RETURN v7
+  r5 = MOV r4
+  r6 = IMM 20
+  r7 = IMM 40
+  RETURN r7

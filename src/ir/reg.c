@@ -38,10 +38,10 @@ void release_Reg(Reg* r) {
 void print_Reg(FILE* p, Reg* r) {
   switch (r->kind) {
     case REG_VIRT:
-      fprintf(p, "v%d", r->virtual);
+      fprintf(p, "r%d", r->virtual);
       break;
     case REG_REAL:
-      fprintf(p, "r%d", r->real);
+      fprintf(p, "x%d", r->real);
       break;
     default:
       OIR_UNREACHABLE;

@@ -84,7 +84,9 @@ void compute_global_available_sets(OIR* ir) {
   FOR_EACH (BasicBlock*, block, BBList, ir->blocks) {
     release_BitSet(block->available_out);
     block->available_out = new_BitSet(ir->expr_count);
-    fill_BitSet(block->available_out);
+    if (block != ir->entry) {
+      fill_BitSet(block->available_out);
+    }
   }
 
   bool changed;

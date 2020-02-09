@@ -1,17 +1,17 @@
 # test: "$OIR_BIN" -p reach,prop
 LABEL entry
-  v1 = IMM 10
-  v2 = MOV v1
-  v3 = ADD v1 v2
-  BRANCH v2 a b
+  r1 = IMM 10
+  r2 = MOV r1
+  r3 = ADD r1 r2
+  BRANCH r2 a b
 LABEL a
-  v4 = IMM 1
+  r4 = IMM 1
   JUMP end
 LABEL b
-  v4 = IMM 2
+  r4 = IMM 2
   JUMP end
 LABEL end
-  v5 = MOV v4     # should not be propagated
-  v6 = IMM 20
-  v7 = ADD v3 v6  # should be propagated
-  RETURN v7
+  r5 = MOV r4     # should not be propagated
+  r6 = IMM 20
+  r7 = ADD r3 r6  # should be propagated
+  RETURN r7

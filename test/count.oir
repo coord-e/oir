@@ -1,14 +1,14 @@
 # test: "$OIR_BIN"
 LABEL entry
-  v1 = IMM 0   # カウンタ
-  v2 = IMM 10  # カウンタの最大値
-  v3 = IMM 0   # 和
+  r1 = IMM 0   # カウンタ
+  r2 = IMM 10  # カウンタの最大値
+  r3 = IMM 0   # 和
   JUMP loop
 LABEL loop
-  v4 = IMM 1
-  v1 = ADD v1 v4
-  v3 = ADD v3 v1
-  v5 = EQUAL v1 v2
-  BRANCH v5 end loop
+  r4 = IMM 1
+  r1 = ADD r1 r4
+  r3 = ADD r3 r1
+  r5 = EQUAL r1 r2
+  BRANCH r5 end loop
 LABEL end
-  RETURN v3
+  RETURN r3

@@ -1,16 +1,16 @@
 # test: "$OIR_BIN" -p available,cse
 LABEL entry
-  v1 = IMM 1
-  BRANCH v1 label1 label2
+  r1 = IMM 1
+  BRANCH r1 label1 label2
 LABEL label1
-  v3 = ADD v1 v1
+  r3 = ADD r1 r1
   JUMP join
 LABEL label2
-  v5 = ADD v1 v1
+  r5 = ADD r1 r1
   JUMP join
 LABEL join
-  v6 = ADD v1 v1
-  v7 = ADD v3 v6
-  v8 = ADD v5 v6
-  v9 = ADD v7 v8
-  RETURN v9
+  r6 = ADD r1 r1
+  r7 = ADD r3 r6
+  r8 = ADD r5 r6
+  r9 = ADD r7 r8
+  RETURN r9

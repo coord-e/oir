@@ -1,15 +1,15 @@
 # OIR entry=0, exit=2
 # BB0 succs={1} preds={}
 LABEL entry  # 0
-  v2 = IMM 30
+  r2 = IMM 30
   JUMP loop  # 1
 # BB1 succs={2, 1} preds={0, 1}
 LABEL loop  # 1
-  v3 = IMM 10
-  v4 = EQUAL v2 v3
-  v2 = IMM 10
-  BRANCH v4 end loop  # 2, 1
+  r3 = IMM 10
+  r4 = EQUAL r2 r3
+  r2 = IMM 10
+  BRANCH r4 end loop  # 2, 1
 # BB2 succs={} preds={1}
 LABEL end  # 2
-  v5 = IMM 20
-  RETURN v5
+  r5 = IMM 20
+  RETURN r5
