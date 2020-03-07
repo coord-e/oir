@@ -6,6 +6,7 @@
 typedef enum {
   OUTPUT_TEXT,
   OUTPUT_GRAPH,
+  OUTPUT_JSON,
 } OutputFormat;
 
 void print_OutputFormat(FILE*, OutputFormat);

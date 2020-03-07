@@ -13,6 +13,9 @@ void print_OutputFormat(FILE* f, OutputFormat k) {
     case OUTPUT_GRAPH:
       fputs("graph", f);
       break;
+    case OUTPUT_JSON:
+      fputs("json", f);
+      break;
     default:
       OIR_UNREACHABLE;
   }
@@ -23,7 +26,9 @@ OutputFormat parse_OutputFormat(const char* input) {
     return OUTPUT_TEXT;
   } else if (strcmp(input, "graph") == 0) {
     return OUTPUT_GRAPH;
+  } else if (strcmp(input, "json") == 0) {
+    return OUTPUT_JSON;
   } else {
-    error("unknown output format: %s (available formats: text, graph)", input);
+    error("unknown output format: %s (available formats: text, graph, json)", input);
   }
 }

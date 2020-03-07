@@ -26,7 +26,7 @@ usage: oir [options]
 
 `-p`オプションで入力に施す解析や最適化とその順番をカンマ区切りで指定できます。さらに、`-l`オプションで`-p`で指定した手順を指定回数繰り返させることができます。
 
-`-g`オプションで出力の形式を指定できます。`-g text`でOIRをテキストとして、`-g graph`で[Graphviz](https://www.graphviz.org/)のdot形式でCFGとして出力します。出力したdot形式のファイルは、`dot`コマンドでPDFや画像として見ることができます。
+`-g`オプションで出力の形式を指定できます。`-g text`がデフォルトの形式です。`-g json`で、解析結果を含めたOIRについてのほとんどの情報をJSON形式で出力します。`-g graph`では、[Graphviz](https://www.graphviz.org/)のdot形式でOIRのCFGを出力します。出力したdot形式のファイルは、`dot`コマンドでPDFや画像として見ることができます。
 
 例えば、`text/count.oir`にデッドコード削除を行った結果のOIRのCFGを`cfg.pdf`に出力するには、次のようにします:
 

@@ -31,6 +31,9 @@ static void output(Options* opts, OIR* ir) {
     case OUTPUT_GRAPH:
       print_graph_OIR(f, ir);
       break;
+    case OUTPUT_JSON:
+      print_json_OIR(f, ir);
+      break;
     default:
       OIR_UNREACHABLE;
   }
