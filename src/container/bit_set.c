@@ -166,13 +166,17 @@ unsigned mssb_BitSet(const BitSet* s) {
 }
 
 void print_BitSet(FILE* p, const BitSet* s) {
-  fputs("{", p);
+  bool init = true;
   for (unsigned i = 0; i < s->length; i++) {
     if (get_BitSet(s, i)) {
-      fprintf(p, "%d, ", i);
+      if (!init) {
+        fprintf(p, ", ");
+      } else {
+        init = false;
+      }
+      fprintf(p, "%d", i);
     }
   }
-  fputs("}", p);
 }
 
 void release_BitSet(BitSet* s) {

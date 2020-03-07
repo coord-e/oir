@@ -41,6 +41,7 @@ BasicBlock* new_BasicBlock(unsigned id);
 void release_BasicBlock(BasicBlock*);
 void print_BasicBlock(FILE*, BasicBlock*);
 void print_graph_BasicBlock(FILE*, BasicBlock*);
+void print_json_BasicBlock(FILE*, BasicBlock*);
 
 void connect_BasicBlock(BasicBlock* from, BasicBlock* to);
 void disconnect_BasicBlock(BasicBlock* from, BasicBlock* to);

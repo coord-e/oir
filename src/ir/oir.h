@@ -32,6 +32,7 @@ OIR* new_OIR();
 void release_OIR(OIR*);
 void print_OIR(FILE*, OIR*);
 void print_graph_OIR(FILE*, OIR*);
+void print_json_OIR(FILE*, OIR*);
 
 void detach_BasicBlock(OIR*, BasicBlock*);
 

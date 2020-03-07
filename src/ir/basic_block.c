@@ -1,6 +1,8 @@
 #include "ir/basic_block.h"
 
+#include "util/convention.h"
 #include "util/dummy.h"
+#include "util/print_json.h"
 
 DEFINE_LIST(dummy_release, BasicBlock*, BBRefList)
 static unsigned get_id(Inst* inst) {
@@ -92,4 +94,42 @@ void print_graph_BasicBlock(FILE* p, BasicBlock* block) {
     print_block_set(p, "block_", ":init:n", block->succs);
     fprintf(p, "\n");
   }
+}
+
+static void print_json_block_set(FILE* f, BBRefList* bbs) {
+  print_block_set(f, "", "", bbs);
+}
+
+static void print_json_insts(FILE* f, InstRange* insts) {
+  FOR_EACH (Inst*, inst, InstRange, insts) {
+    print_json_Inst(f, inst);
+    if (!is_nil_InstRangeIterator(next_InstRangeIterator(it_inst))) {
+      fprintf(f, ", ");
+    }
+  }
+}
+
+void print_json_BasicBlock(FILE* f, BasicBlock* block) {
+  JSON_PRINT_START(f);
+
+  JSON_PRINT(f, "id", block->id, print_unsigned);
+  JSON_PRINT_ARRAY(f, "succs", block->succs, print_json_block_set);
+  JSON_PRINT_ARRAY(f, "preds", block->preds, print_json_block_set);
+
+  JSON_PRINT_ARRAY_MAYBE(f, "live_in", block->live_in, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "live_out", block->live_out, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "live_gen", block->live_gen, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "live_kill", block->live_kill, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "reach_in", block->reach_in, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "reach_out", block->reach_out, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "reach_gen", block->reach_gen, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "reach_kill", block->reach_kill, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "available_in", block->available_in, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "available_out", block->available_out, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "available_gen", block->available_gen, print_BitSet);
+  JSON_PRINT_ARRAY_MAYBE(f, "available_kill", block->available_kill, print_BitSet);
+
+  JSON_PRINT_ARRAY_LAST(f, "instructions", block->instructions, print_json_insts);
+
+  JSON_PRINT_END(f);
 }

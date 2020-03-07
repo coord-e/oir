@@ -54,6 +54,7 @@ typedef struct {
 Inst* new_Inst(unsigned id, InstKind);
 void release_Inst(Inst*);
 void print_Inst(FILE*, Inst*);
+void print_json_Inst(FILE*, Inst*);
 
 bool is_expression(Inst*);
 bool compare_expressions(Inst*, Inst*);
