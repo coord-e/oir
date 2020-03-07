@@ -15,10 +15,10 @@ TARGET_EXEC ?= oir$(OBJ_SUFFIX)
 
 
 ifeq ($(DEBUG), 1)
-  CFLAGS += -O0 -g3
+	CFLAGS += -O0 -g3
 	OBJ_SUFFIX := $(OBJ_SUFFIX).debug
 else
-  CFLAGS += -O3
+	CFLAGS += -O3
 endif
 
 ifeq ($(SANITIZER), 1)
